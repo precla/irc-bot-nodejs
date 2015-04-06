@@ -1,0 +1,36 @@
+{
+    // JSHint Configuration File
+    // See http://jshint.com/docs/ for more details
+
+    // Settings
+
+    "maxerr"        : 100,      // {int} Maximum error before stopping
+
+    // Predefined globals whom JSHint will ignore.
+
+    "node"          : true,     // Standard node globals
+    "jquery"        : true,     // Defines globals exposed by the jQuery JavaScript library.
+
+    // Development.
+
+    "devel"         : true,     // Allow developments statements e.g. `console.log();`.
+
+    // Enforcing
+
+    "bitwise"       : true,     // true: Prohibit bitwise operators (&, |, ^, etc.)
+    "curly"         : true,     // true: Require {} for every new block or scope
+    "indent"        : 4,        // {int} Number of spaces to use for indentation
+    "noempty"       : true,     // true: Prohibit use of empty blocks
+    "quotmark"      : "single", // Quotation mark consistency:
+                                //  false       : do nothing (default)
+                                //  true        : ensure whatever is used is consistent
+                                //  "single"    : require single quotes
+                                //  "double"    : require double quotes
+    "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
+
+    // Relaxing
+
+    "sub"           : true,     // true: Tolerate using `[]` notation when it can still be expressed in dot notation
+    "shadow"        : true,     // true: Tolerate declaring a variable that had been already declared somewhere in the outer scope.
+    "-W020"         : true      // true: Tolerate Read only variables.
+}

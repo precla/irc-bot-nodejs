@@ -37,25 +37,25 @@ var bot = new irc.Client('SERVER', 'BOTNAME', {
 bot.addListener('message', function(nick, to, text, message) {
 	var args = text.split(' ');				//removes ' ' and converts into array
 		
-	if( args[0] == '!wp' && !args[1] ){
+	if (args[0] == '!wp' && !args[1]) {
 		bot.say(to, 'Missing arguments. Usage example: !wp NodeJS');
-	} else if (args[0] == '!wp') {		
-		args.shift();						//removes first element in array
-		var args = args.join(' ');			//joins array into new string with ' ' between strings
+	} else if (args[0] == '!wp') {
+		args.shift();
+		var args = args.join(' ');
 		var title = querystring.stringify({ titles: args });
 		var wiki = 'https://en.wikipedia.org/w/api.php?continue=&action=query&' + title + '&indexpageids=&prop=extracts&exintro=&explaintext=&format=json';
-		
+
 		request(wiki, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
 				var wikiSummary = JSON.parse(body);
 				var pageId = wikiSummary.query.pageids[0];
 				wikiSummary = wikiSummary.query.pages[pageId].extract;
 				wikiSummary = wikiSummary.slice(0, 240);
-				wikiSummary = wikiSummary.concat("... Read more: " + "https://en.wikipedia.org/wiki/" + title.slice(7) );
-				bot.say(to, wikiSummary );
+				wikiSummary = wikiSummary.concat('... Read more: ' + 'https://en.wikipedia.org/wiki/' + title.slice(7));
+				bot.say(to, wikiSummary);
 			}
-		})
-    }
+		});
+	}
 });
 
 bot.addListener('error', function(message) {

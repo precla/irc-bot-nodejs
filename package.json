@@ -1,0 +1,34 @@
+{
+  "name": "irc-bot-nodejs",
+  "version": "0.1.0",
+  "description": "IRC Bot for any irc",
+  "homepage": "https://github.com/precla/irc-bot-nodejs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/precla/irc-bot-nodejs.git"
+  },
+  "author": {
+    "name": "precla",
+    "email": "precla@users.noreply.github.com"
+  },
+  "license": "GNU GPL v3",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "test": "grunt --verbose"
+  },
+  "dependencies": {
+    "irc": "0.3.10",
+    "request": "2.55.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.11.1",
+    "grunt-lintspaces": "~0.6.2",
+    "grunt-jscs": "~1.6.0",
+    "load-grunt-tasks": "~3.1.0",
+    "time-grunt": "~1.1.0",
+    "jshint-summary": "~0.4.0"
+  },
+  "engine": "node 0.10.x"
+}
