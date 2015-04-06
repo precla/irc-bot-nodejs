@@ -2,16 +2,16 @@
 irc-bot-nodejs is a simple IRC bot with basic functionalities that will be addec over time
 
 ## Usage
--install Node.js (irc, request & querystring are requiered)
--change SERVER, BOTNAME, YOURCHAN & port
--run with: 'node bot.js'
--while in irc channel type (for example): !wp Github
+1. install Node.js (irc, request & querystring are requiered)
+2. change SERVER, BOTNAME, YOURCHAN & port
+3. run with: 'node bot.js'
+4. while in irc channel type (for example): !wp Github
 
-###TO DO:
+### To do:
 -add more?
 
-###DONE:
+### Done:
 -initial commit :D
 
-###LICENSE:
+### License:
 -GNU GPL v3
