@@ -24,19 +24,20 @@ var irc = require('irc'),
 	request = require('request'),
 	querystring = require('querystring');
 
-//bot config
+	// bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
 	port: 7000,
-    debug: true,
+	debug: true,
 	secure: true,
 	selfSigned: true,
-    autoConnect: true,
-	channels: ['#YOURCHAN'],
+	autoConnect: true,
+	channels: ['#YOURCHAN']
 });
 
 bot.addListener('message', function(nick, to, text, message) {
-	var args = text.split(' ');				//removes ' ' and converts into array
-		
+	// removes ' ' and converts into array
+	var args = text.split(' ');
+
 	if (args[0] == '!wp' && !args[1]) {
 		bot.say(to, 'Missing arguments. Usage example: !wp NodeJS');
 	} else if (args[0] == '!wp') {
@@ -49,15 +50,24 @@ bot.addListener('message', function(nick, to, text, message) {
 			if (!error && response.statusCode == 200) {
 				var wikiSummary = JSON.parse(body);
 				var pageId = wikiSummary.query.pageids[0];
-				wikiSummary = wikiSummary.query.pages[pageId].extract;
-				wikiSummary = wikiSummary.slice(0, 240);
-				wikiSummary = wikiSummary.concat('... Read more: ' + 'https://en.wikipedia.org/wiki/' + title.slice(7));
-				bot.say(to, wikiSummary);
+				if (pageId == -1) {
+					bot.say(to, 'Article does not exist!');
+				} else {
+					wikiSummary = wikiSummary.query.pages[pageId].extract;
+					wikiSummary = wikiSummary.slice(0, 280);
+					var checkRedirect = wikiSummary.slice(0, 70);
+					if (checkRedirect == 'This is a redirect from a title with another method of capitalisation.') {
+						bot.say(to, 'Article is redirecting, please use the following link: https://en.wikipedia.org/wiki/' + title.slice(7));
+					} else {
+						wikiSummary = wikiSummary.concat('... Read more: ' + 'https://en.wikipedia.org/wiki/' + title.slice(7));
+						bot.say(to, wikiSummary);
+					}
+				}
 			}
 		});
 	}
 });
 
 bot.addListener('error', function(message) {
-    console.log('error: ', message);
+	console.log('error: ', message);
 });
