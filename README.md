@@ -17,8 +17,8 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 -add more?
 
 ### Done:
--Weather command
--TvRage
+- Weather command
+- TvRage
 
 ### License:
--GNU GPL v3
+- GNU GPL v3
