@@ -35,6 +35,11 @@ var bot = new irc.Client('SERVER', 'BOTNAME', {
 	channels: ['#YOURCHAN']
 });
 
+// listen for pm
+bot.addListener('pm', function(nick, text, message) {
+	bot.say(nick, 'Type !help for a list of commands');
+});
+
 bot.addListener('message', function(nick, to, text, message) {
 	// removes ' ' and converts into array
 	var args = text.split(' ');
@@ -209,6 +214,8 @@ bot.addListener('message', function(nick, to, text, message) {
 				}
 			});
 		}
+	} else if (args[0] == '!help') {
+		bot.say(nick, 'Commands available:\n!wp - wikipedia summary\n!weather - current weather\n!tv, !next, !last - for tv show info\!help');
 	}
 
 });
