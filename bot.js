@@ -25,7 +25,7 @@ var irc = require('irc'),
 	querystring = require('querystring'),
 	moment = require('moment');
 
-	// bot config
+// bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
 	port: 7000,
 	debug: true,
@@ -49,7 +49,7 @@ bot.addListener('message', function(nick, to, text, message) {
 			bot.say(to, 'Missing arguments. Usage example: !wp NodeJS');
 		} else {
 			args.shift();                                           // removes first arg and moves others by -1
-			var args = args.join(' ');                              // adds ' ' between every elemnt of array and saves as string
+			args = args.join(' ');                                  // adds ' ' between every element of array and saves as string
 			var titleSecondTry = args;                              // save a copy for later use - if string has to be capitalized: martin scorsese -> Martin Scorsese
 			var title = querystring.stringify({ titles: args });    // add titles= before string
 			var wiki = 'https://en.wikipedia.org/w/api.php?continue=&action=query&' + title + '&indexpageids=&prop=extracts&exintro=&explaintext=&format=json';
@@ -117,10 +117,10 @@ bot.addListener('message', function(nick, to, text, message) {
 
 			// check if user wants to search by ZIP code or by city name
 			if (args[0] == 'zip') {
-				var userInput = 'zip=' + args[1];
+				userInput = 'zip=' + args[1];
 			} else {
 				args = args.join('');
-				var userInput = 'q=' + args;
+				userInput = 'q=' + args;
 			}
 			userInput += metric + apiKey;
 			var openweatherLink = currentWeather + userInput;
@@ -132,8 +132,9 @@ bot.addListener('message', function(nick, to, text, message) {
 						console.log('error while trying to get weather, "cod" code: ', openweatherJson.cod);
 						bot.say(to, 'Not found.');
 					} else if (openweatherJson.cod == '200') {
-						var sunrise = new Date(openweatherJson.sys.sunrise * 1000);
-						var sunset = new Date(openweatherJson.sys.sunset * 1000);
+						// sunrise & sunset are currently not in use, uncomment if you want ot use:
+						// var sunrise = new Date(openweatherJson.sys.sunrise * 1000);
+						// var sunset = new Date(openweatherJson.sys.sunset * 1000);
 
 						var openweatherSummary = 'The current temperature in ' + openweatherJson.name +
 												', ' + openweatherJson.sys.country + ' is: ' + openweatherJson.main.temp.toFixed(1) +
