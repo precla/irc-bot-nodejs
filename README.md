@@ -1,5 +1,5 @@
 # irc-bot-nodejs
-irc-bot-nodejs is a simple IRC bot with basic functionalities that will be added over time
+irc-bot-nodejs is a simple IRC bot with basic functionalities
 
 ## Usage
 1. install Node.js (irc, request & querystring are required)
@@ -11,14 +11,14 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities that will be added
 - !wp <Article> - get sumamry from Wikipedia for Article. Example: !wp Microsoft
 - !weather [zip] <City> - get weather info for city. The argument [zip] is not requiered
 	example: '!weather Zagreb' - OR - '!weather 10000,hr' will show weather for Zagreb
+- !tv, !next, !last <showname> - for example: '!next Suits' - gets info about next episode
 
 ### To do:
 -add more?
--add version number
 
 ### Done:
--initial commit :D
--added Weather command
+-Weather command
+-TvRage
 
 ### License:
 -GNU GPL v3
