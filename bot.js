@@ -191,7 +191,7 @@ bot.addListener('message', function(nick, to, text, message) {
 						lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
 
 						// get passed time from last episode
-						var timeOfLastEp = moment(lastEp.slice(-12, -1, 'MMM-DD-YYYY'));				// time from tvrage, last episode
+						var timeOfLastEp = moment.utc(lastEp.slice(-12, -1), 'MMM-DD-YYYY');			// time from tvrage, last episode
 						var currentTime = moment();														// current time
 						var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
