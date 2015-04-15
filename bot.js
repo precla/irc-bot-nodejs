@@ -195,7 +195,7 @@ bot.addListener('message', function(nick, to, text, message) {
 						var currentTime = moment();														// current time
 						var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
-						var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ' + duration.seconds() + ' secs';
+						var timeFromLast = (currentTime.diff(timeOfLastEp, 'days') - 1) + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ' + duration.seconds() + ' secs';
 
 						lastEp = 'Latest Episode was ' + timeFromLast + ' ago | Number: S' + lastEp.slice(0, 2) + lastEp.slice(2, 5).replace('x', 'E') +
 									' | Title: ' + lastEp.slice(lastEp.indexOf('^') + 1, lastEp.lastIndexOf('^'));
