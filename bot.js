@@ -171,8 +171,10 @@ bot.addListener('message', function(nick, to, text, message) {
 						var lastEp;
 
 						// if show ended or cancelled, than there is no upcoming episode
-						if (tvrageContent.indexOf('Status@Ended') >= '0' || tvrageContent.indexOf('Status@Ended') >= '0') {
+						if (tvrageContent.indexOf('Status@Ended') >= '0') {
 							nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
+						} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
+							nextEp = 'No info about upcoming episodes.';
 						} else {
 							nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
 
@@ -191,8 +193,8 @@ bot.addListener('message', function(nick, to, text, message) {
 						lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
 
 						// get passed time from last episode
-						var timeOfLastEp = moment.utc(lastEp.slice(-12, -1), 'MMM-DD-YYYY');			// time from tvrage, last episode
-						var currentTime = moment();														// current time
+						var timeOfLastEp = moment.utc(lastEp.slice(-12, -1), 'MMM-DD-YYYY');				// time from tvrage, last episode
+						var currentTime = moment.utc();														// current time in utc format
 						var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
 						var timeFromLast = (currentTime.diff(timeOfLastEp, 'days') - 1) + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ' + duration.seconds() + ' secs';
