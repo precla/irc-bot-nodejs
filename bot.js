@@ -23,7 +23,8 @@
 var irc = require('irc'),
 	request = require('request'),
 	querystring = require('querystring'),
-	moment = require('moment');
+	moment = require('moment'),
+	TVRage = require('tvragejson');
 
 // bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
@@ -154,66 +155,91 @@ bot.addListener('message', function(nick, to, text, message) {
 		} else {
 			var argInput = args[0];
 			args.shift();
-			var args = args.join(' ');
-			var userInput = querystring.stringify({ show: args });
-			var tvrageLink = 'http://services.tvrage.com/tools/quickinfo.php?' + userInput;
+			args = args.join(' ');
+			TVRage.search(args, function (err, response) {
+				if (!err && (response['Results'] !== '0')) {
+					var showID = parseInt(response['Results']['show'][0]['showid']);
+					var showSummary, showSummaryShort, tvShowLink, nextEp, lastEp, genres, airtimeOfEp;
+					TVRage.fullShowInfo(showID, function (err, response) {
+						tvShowLink = response['Show']['showlink'];
+						airtimeOfEp = response['Show']['airtime'];
 
-			request(tvrageLink, function (error, response, body) {
-				if (!error && response.statusCode == 200) {
-					var tvrageContent = body;
-					var checkIfExists = tvrageContent.slice(0, 7);
-					if (checkIfExists == 'No Show') {
-						bot.say(to, 'Not found. Try harder!');
-					} else {
-						var tvTitle = tvrageContent.slice(tvrageContent.indexOf('Name@') + 5, tvrageContent.indexOf('Show URL@') - 1);
-						var tvURL = tvrageContent.slice(tvrageContent.indexOf('URL@') + 4, tvrageContent.indexOf('Premiered@') - 1);
-						var nextEp;
-						var lastEp;
-
-						// if show ended or cancelled, than there is no upcoming episode
-						if (tvrageContent.indexOf('Status@Ended') >= '0') {
-							nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
-						} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
-							nextEp = 'No info about upcoming episodes.';
+						// if more than one genre, do join
+						if (response['Show']['genres']['genre'] >= 2) {
+							genres = response['Show']['genres']['genre'].join(', ');
 						} else {
-							nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
-
-							// get remaining time until next episode
-							var timeOfNextEp = new Date(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000);
-							var duration = moment.duration((timeOfNextEp - moment()), 'milliseconds');
-							duration = moment.duration(duration.asSeconds() - 1, 'seconds');
-
-							var timeUntilNext = duration.days() + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ' + duration.seconds() + ' secs';
-
-							nextEp = 'Next Episode: in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
-									' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
+							genres = response['Show']['genres']['genre'];
 						}
 
-						// get info for latest episode
-						lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
+						showSummary = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ') | Genre: ' +
+										genres + ' | Status: ' + response['Show']['status'] +
+										' | Launch date: ' + response['Show']['started'];
+						showSummaryShort = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ')';
 
-						// get passed time from last episode
-						var timeOfLastEp = moment.utc(lastEp.slice(-12, -1), 'MMM-DD-YYYY');				// time from tvrage, last episode
-						var currentTime = moment.utc();														// current time in utc format
-						var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
+						var userInput = querystring.stringify({ show: args });
+						var tvrageLink = 'http://services.tvrage.com/tools/quickinfo.php?' + userInput;
+						request(tvrageLink, function (error, response, body) {
+							if (!error && response.statusCode == 200) {
 
-						var timeFromLast = (currentTime.diff(timeOfLastEp, 'days') - 1) + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ' + duration.seconds() + ' secs';
+								var tvrageContent = body;
+								var tvTitle = tvrageContent.slice(tvrageContent.indexOf('Name@') + 5, tvrageContent.indexOf('Show URL@') - 1);
 
-						lastEp = 'Latest Episode was ' + timeFromLast + ' ago | Number: S' + lastEp.slice(0, 2) + lastEp.slice(2, 5).replace('x', 'E') +
-									' | Title: ' + lastEp.slice(lastEp.indexOf('^') + 1, lastEp.lastIndexOf('^'));
+								// get infor for next episode but before that, check
+								// if show ended or cancelled, than there is no upcoming episode
+								if (tvrageContent.indexOf('Status@Ended') >= '0') {
+									nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
+								} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
+									nextEp = 'No info about upcoming episodes.';
+								} else {
+									// the next line is required to get SxxExx later on
+									nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
 
-						var tvrageContentSummary = tvTitle + ' | ';
-						if (argInput == '!tv') {
-							tvrageContentSummary = tvrageContentSummary + lastEp + ' | ' + tvURL;
-						} else if (argInput == '!next') {
-							tvrageContentSummary = tvrageContentSummary + nextEp;
-						} else {
-							// !last
-							tvrageContentSummary = tvrageContentSummary + lastEp;
-						}
+									// get passed time from last episode
+									var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000);
+									var timeOfNextEp = moment.utc(unixTime);														// time from tvrage, next episode
+									var currentTime = moment.utc();																	// current time in utc format
+									var duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
 
-						bot.say(to, tvrageContentSummary);
-					}
+									var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * (-1)) + ' hours ' +
+														(duration.minutes() * (-1)) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
+
+									nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
+											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
+								}
+
+								// get info for latest episode but before that, check
+								// if there is any info about the latest episode
+								if (tvrageContent.indexOf('Latest Episode@') <= '0') {
+									lastEp = 'No info about last episode.';
+								} else {
+									lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
+
+									// get passed time from last episode
+									var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from tvrage, last episode
+									var currentTime = moment.utc();																	// current time in utc format
+									var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
+
+									var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
+
+									lastEp = 'Latest Episode was ' + timeFromLast + ' ago (' + moment.utc(timeOfLastEp).format('DD-MM-YYYY HH:mm') +
+											' UTC)' + ' | Number: S' + lastEp.slice(0, 2) + lastEp.slice(2, 5).replace('x', 'E') +
+											' | Title: ' + lastEp.slice(lastEp.indexOf('^') + 1, lastEp.lastIndexOf('^'));
+								}
+
+								if (argInput == '!tv') {
+									showSummary = showSummary + ' | ' + lastEp;
+								} else if (argInput == '!next') {
+									showSummary = showSummaryShort + ' | ' + nextEp + ' | ' + tvShowLink;
+								} else if (argInput == '!last') {
+									showSummary = showSummaryShort + ' | ' + lastEp + ' | ' + tvShowLink;
+								}
+								bot.say(to, showSummary);
+							}
+						});
+					});
+				} else {
+					console.log(err);
+					bot.say(to, 'Not found. Try harder!');
 				}
 			});
 		}
