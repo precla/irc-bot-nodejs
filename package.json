@@ -20,7 +20,9 @@
   "dependencies": {
     "irc": "0.3.10",
     "request": "2.55.0",
-	"tvragejson": "0.2.1"
+	"tvragejson": "0.2.1",
+	"lodash": "3.7.0",
+	"moment": "2.10.2"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
