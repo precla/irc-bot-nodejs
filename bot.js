@@ -184,8 +184,8 @@ bot.addListener('message', function(nick, to, text, message) {
 								var tvrageContent = body;
 								var tvTitle = tvrageContent.slice(tvrageContent.indexOf('Name@') + 5, tvrageContent.indexOf('Show URL@') - 1);
 
-								// get infor for next episode but before that, check
-								// if show ended or cancelled, than there is no upcoming episode
+								// get info for next episode but before that, check
+								// if show ended or canceled, than there is no upcoming episode
 								if (tvrageContent.indexOf('Status@Ended') >= '0') {
 									nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
 								} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
@@ -196,8 +196,8 @@ bot.addListener('message', function(nick, to, text, message) {
 
 									// get passed time from last episode
 									var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000);
-									var timeOfNextEp = moment.utc(unixTime);														// time from tvrage, next episode
-									var currentTime = moment.utc();																	// current time in utc format
+									var timeOfNextEp = moment.utc(unixTime);														// time from TVRage, next episode
+									var currentTime = moment.utc();																	// current time in UTC format
 									var duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
 
 									var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * (-1)) + ' hours ' +
@@ -215,8 +215,8 @@ bot.addListener('message', function(nick, to, text, message) {
 									lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
 
 									// get passed time from last episode
-									var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from tvrage, last episode
-									var currentTime = moment.utc();																	// current time in utc format
+									var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from TVRage, last episode
+									var currentTime = moment.utc();																	// current time in UTC format
 									var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
 									var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
