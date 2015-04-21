@@ -24,7 +24,8 @@ var irc = require('irc'),
 	request = require('request'),
 	querystring = require('querystring'),
 	moment = require('moment'),
-	TVRage = require('tvragejson');
+	TVRage = require('tvragejson'),
+	_ = require('lodash');
 
 // bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
@@ -158,8 +159,16 @@ bot.addListener('message', function(nick, to, text, message) {
 			args = args.join(' ');
 			TVRage.search(args, function (err, response) {
 				if (!err && (response['Results'] !== '0')) {
-					var showID = parseInt(response['Results']['show'][0]['showid']);
-					var showSummary, showSummaryShort, tvShowLink, nextEp, lastEp, genres, airtimeOfEp;
+					var showID, showSummary, showSummaryShort, tvShowLink, nextEp, lastEp, genres, airtimeOfEp;
+
+					// TVRage sometimes responds with multiple shows which are saved into array
+					// the following request is required, otherwise the bot would crash if it doesn't get a array
+					if (_.isArray(response['Results']['show'])) {
+						showID = parseInt(response['Results']['show'][0]['showid']);
+					} else {
+						showID = parseInt(response['Results']['show']['showid']);
+					}
+
 					TVRage.fullShowInfo(showID, function (err, response) {
 						tvShowLink = response['Show']['showlink'];
 						airtimeOfEp = response['Show']['airtime'];
