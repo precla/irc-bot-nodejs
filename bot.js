@@ -47,7 +47,7 @@ bot.addListener('notice', function (nick, to, text, message) {
 		bot.say('NickServ', 'identify PASSWORD');
 	}
 	if (message.args[1].match(/Password accepted - you are now recognized./g) !== null) {
-		bot.join('#CHANNEL')
+		bot.join(bot.opt.channels.join(','));
 	}
 });
 
