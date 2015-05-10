@@ -268,7 +268,7 @@ bot.addListener('message', function(nick, to, text, message) {
 			args.shift();
 			// if there's 'http(s)://' remove it
 			var urlToCheck = args[0].replace(/(http:|https:)\/\//g, '');
-			
+
 			// some sites like google.com don't get checked properly without 'www.'
 			// so it checks if users has included 'www.' in link, if not add 'www.'
 			if (!urlToCheck.match(/(www\.)/g)) {
@@ -280,7 +280,7 @@ bot.addListener('message', function(nick, to, text, message) {
 					if (!error && response.statusCode == 200) {
 						if (body.match(/It\'s just you/g)) {
 							bot.say(to, 'Site is up!');
-						} else if (body.match(/Huh\?/g)) { 
+						} else if (body.match(/Huh\?/g)) {
 							bot.say(to, 'Sorry pal, that url does not seem to be correct..');
 						} else {
 							bot.say(to, 'Site is down!');
