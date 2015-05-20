@@ -308,7 +308,11 @@ bot.addListener('message', function(nick, to, text, message) {
 				if (body.match(/<title>/g)) {
 					var imageTitle = body.split(/\n/gi);
 					imageTitle = imageTitle[7];
-					imageTitle = imageTitle.slice(0, imageTitle.indexOf('</title>'));
+
+					// http://stackoverflow.com/a/528786
+					imageTitle.replace(/&#(\d+);/g, function (m, n) {
+						return String.fromCharCode(n);
+					});
 					bot.say(to, imageTitle);
 				}
 			}
