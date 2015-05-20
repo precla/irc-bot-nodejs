@@ -310,7 +310,7 @@ bot.addListener('message', function(nick, to, text, message) {
 					imageTitle = imageTitle[7];
 
 					// http://stackoverflow.com/a/528786
-					imageTitle.replace(/&#(\d+);/g, function (m, n) {
+					imageTitle = imageTitle.replace(/&#(\d+);/g, function (m, n) {
 						return String.fromCharCode(n);
 					});
 					bot.say(to, imageTitle);
