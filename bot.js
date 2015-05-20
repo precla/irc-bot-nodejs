@@ -291,6 +291,28 @@ bot.addListener('message', function(nick, to, text, message) {
 				bot.say(to, 'Sorry pal, that url does not seem to be correct..');
 			}
 		}
+	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)\/(gallery\/)?(\w{3,})\/?(.\w{3})?(\W\d)?/gi)) {
+		var imageID, titleToRespond = text.split(/\//gi);
+
+		if (titleToRespond[3].match(/gallery/gi)) {
+			imageID = 'gallery/' + titleToRespond[4];
+		} else {
+			imageID = titleToRespond[3];
+		}
+		if (imageID.match(/\./g)) {
+			imageID = imageID.slice(0, imageID.indexOf('.'));
+		}
+		var requestURL = 'https://imgur.com/' + imageID;
+		request(requestURL, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				if (body.match(/<title>/g)) {
+					var imageTitle = body.split(/\n/gi);
+					imageTitle = imageTitle[7];
+					imageTitle = imageTitle.slice(0, imageTitle.indexOf('</title>'));
+					bot.say(to, imageTitle);
+				}
+			}
+		});
 	} else if (args[0] == '!help') {
 		bot.say(nick, 'Commands available:\n!wp - wikipedia summary\n!weather - current weather\n!tv, !next, !last - for tv show info\!help');
 	}
