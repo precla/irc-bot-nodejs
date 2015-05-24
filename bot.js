@@ -25,7 +25,9 @@ var irc = require('irc'),
 	querystring = require('querystring'),
 	moment = require('moment'),
 	TVRage = require('tvragejson'),
-	_ = require('lodash');
+	_ = require('lodash'),
+	cheerio = require('cheerio'),
+	c = require('irc-colors');
 
 // bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
