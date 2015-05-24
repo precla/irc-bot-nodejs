@@ -11,6 +11,9 @@
     "name": "precla",
     "email": "precla@users.noreply.github.com"
   },
+  "contributors": [
+    "vBm <vbm@omertabeyond.com>"
+  ],
   "license": "GPL-3.0",
   "main": "bot.js",
   "scripts": {
