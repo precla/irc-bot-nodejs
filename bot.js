@@ -183,81 +183,86 @@ bot.addListener('message', function(nick, to, text) {
 					}
 
 					TVRage.fullShowInfo(showID, function (err, response) {
-						tvShowLink = response['Show']['showlink'];
-						airtimeOfEp = response['Show']['airtime'];
+						if (!err) {
+							tvShowLink = response['Show']['showlink'];
+							airtimeOfEp = response['Show']['airtime'];
 
-						// if more than one genre, do join
-						if (response['Show']['genres']['genre'] >= 2) {
-							genres = response['Show']['genres']['genre'].join(', ');
-						} else {
-							genres = response['Show']['genres']['genre'];
-						}
+							// if more than one genre, do join
+							if (response['Show']['genres']['genre'] >= 2) {
+								genres = response['Show']['genres']['genre'].join(', ');
+							} else {
+								genres = response['Show']['genres']['genre'];
+							}
 
-						showSummary = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ') | Genre: ' +
+							showSummary = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ') | Genre: ' +
 										genres + ' | Status: ' + response['Show']['status'] +
 										' | Launch date: ' + response['Show']['started'];
-						showSummaryShort = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ')';
+							showSummaryShort = 'TVrage info: ' + response['Show']['name'] + ' (' + response['Show']['origin_country'] + ')';
 
-						var userInput = querystring.stringify({ show: args });
-						var tvrageLink = 'http://services.tvrage.com/tools/quickinfo.php?' + userInput;
-						request(tvrageLink, function (error, response, body) {
-							if (!error && response.statusCode === 200) {
+							var userInput = querystring.stringify({ show: args });
+							var tvrageLink = 'http://services.tvrage.com/tools/quickinfo.php?' + userInput;
+							request(tvrageLink, function (error, response, body) {
+								if (!error && response.statusCode === 200) {
 
-								var tvrageContent = body;
-								var currentTime, duration;
+									var tvrageContent = body;
+									var currentTime, duration;
 
-								// get info for the next episode, but before that, check
-								// if the show has ended or been cancelled, then there is no upcoming episode
-								if (tvrageContent.indexOf('Status@Ended') >= '0') {
-									nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
-								} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
-									nextEp = 'No info about upcoming episodes.';
-								} else {
-									// the next line is required to get SxxExx later on
-									nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
+									// get info for the next episode, but before that, check
+									// if the show has ended or been cancelled, then there is no upcoming episode
+									if (tvrageContent.indexOf('Status@Ended') >= '0') {
+										nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
+									} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
+										nextEp = 'No info about upcoming episodes.';
+									} else {
+										// the next line is required to get SxxExx later on
+										nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
 
-									// get passed time from last episode
-									var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000, 10);
-									var timeOfNextEp = moment.utc(unixTime);														// time from TVRage, next episode
-									currentTime = moment.utc();																		// current time in UTC format
-									duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
+										// get passed time from last episode
+										var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000, 10);
+										var timeOfNextEp = moment.utc(unixTime);														// time from TVRage, next episode
+										currentTime = moment.utc();																		// current time in UTC format
+										duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
 
-									var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * -1) + ' hours ' +
+										var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * -1) + ' hours ' +
 														(duration.minutes() * -1) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
 
-									nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
+										nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
 											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
-								}
+									}
 
-								// get info for the latest episode but before that, check
-								// if there is any info about the latest episode
-								if (tvrageContent.indexOf('Latest Episode@') <= '0') {
-									lastEp = 'No info about last episode.';
-								} else {
-									lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
+									// get info for the latest episode but before that, check
+									// if there is any info about the latest episode
+									if (tvrageContent.indexOf('Latest Episode@') <= '0') {
+										lastEp = 'No info about last episode.';
+									} else {
+										lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
 
-									// get passed time from the last episode
-									var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from TVRage, last episode
-									currentTime = moment.utc();																	// current time in UTC format
-									duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
+										// get passed time from the last episode
+										var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from TVRage, last episode
+										currentTime = moment.utc();																	// current time in UTC format
+										duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
-									var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
+										var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
 
-									lastEp = 'Latest Episode was ' + timeFromLast + ' ago (' + moment.utc(timeOfLastEp).format('DD-MM-YYYY HH:mm') +
+										lastEp = 'Latest Episode was ' + timeFromLast + ' ago (' + moment.utc(timeOfLastEp).format('DD-MM-YYYY HH:mm') +
 											' UTC)' + ' | Number: S' + lastEp.slice(0, 2) + lastEp.slice(2, 5).replace('x', 'E') +
 											' | Title: ' + lastEp.slice(lastEp.indexOf('^') + 1, lastEp.lastIndexOf('^'));
-								}
+									}
 
-								if (argInput === '!tv') {
-									showSummary = showSummary + ' | ' + lastEp;
-								} else if (argInput === '!next') {
-									showSummary = showSummaryShort + ' | ' + nextEp + ' | ' + tvShowLink;
-								} else if (argInput === '!last') {
-									showSummary = showSummaryShort + ' | ' + lastEp + ' | ' + tvShowLink;
+									if (argInput === '!tv') {
+										showSummary = showSummary + ' | ' + lastEp;
+									} else if (argInput === '!next') {
+										showSummary = showSummaryShort + ' | ' + nextEp + ' | ' + tvShowLink;
+									} else if (argInput === '!last') {
+										showSummary = showSummaryShort + ' | ' + lastEp + ' | ' + tvShowLink;
+									}
+									bot.say(to, showSummary);
 								}
-								bot.say(to, showSummary);
-							}
-						});
+							});
+						} else {
+							console.error(err);
+							bot.say(to, 'Error while trying to get show info, sorry :C');
+						}
 					});
 				} else {
 					console.error(err);
