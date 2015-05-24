@@ -42,7 +42,7 @@ var bot = new irc.Client('SERVER', 'BOTNAME', {
 	userName: 'BOTNAME',
 	realName: 'BOTNAME',
 	adminNick: 'ADMIN-NICK',
-	channels: ['#YOURCHAN']
+	channels: ['#YOURCHAN'],
 	showErrors: true,
 	floodProtectionDelay: 1000,
 	messageSplit: 512
