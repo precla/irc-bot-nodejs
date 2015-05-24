@@ -1,11 +1,12 @@
+'use strict';
+
 module.exports = function (grunt) {
-	'use strict';
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		jscs: {
 			src: [
-				'bot.js',
+				'bot.js'
 			],
 			options: {
 				config: '.jscsrc'
@@ -14,7 +15,7 @@ module.exports = function (grunt) {
 		jshint: {
 			src: [
 				'Gruntfile.js',
-				'bot.js',
+				'bot.js'
 			],
 			options: {
 				jshintrc: '.jshintrc',
@@ -25,7 +26,7 @@ module.exports = function (grunt) {
 			src: [
 				'Gruntfile.js',
 				'.jshintrc',
-				'bot.js',
+				'bot.js'
 			],
 			options: {
 				editorconfig: '.editorconfig',

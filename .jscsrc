@@ -60,7 +60,7 @@
 	"disallowTrailingComma": true,
 	"disallowKeywordsOnNewLine": ["else"],
 	"validateIndentation": "\t",
-	"validateQuoteMarks": "'"
+	"validateQuoteMarks": "'",
 	"requireSpaceAfterLineComment": true,
 	"validateJSDoc": {
 		"checkParamNames": true,
