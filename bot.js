@@ -38,7 +38,14 @@ var bot = new irc.Client('SERVER', 'BOTNAME', {
 	secure: true,
 	selfSigned: true,
 	autoConnect: true,
+	userNick: 'BOTNICK',
+	userName: 'BOTNAME',
+	realName: 'BOTNAME',
+	adminNick: 'ADMIN-NICK',
 	channels: ['#YOURCHAN']
+	showErrors: true,
+	floodProtectionDelay: 1000,
+	messageSplit: 512
 });
 
 // listen for pm
