@@ -75,7 +75,7 @@ bot.addListener('message', function(nick, to, text) {
 					var pageId = wikiSummary.query.pageids[0];      // get pageID
 
 					// if pageId is -1 then the article does not exist
-					if (pageId === -1) {
+					if (pageId === '-1') {
 
 						// Try again with changing first letter of every word to upper case
 						titleSecondTry = titleSecondTry.replace(/[^\s]+/g, function (word) {
@@ -91,7 +91,7 @@ bot.addListener('message', function(nick, to, text) {
 							if (!err && res.statusCode === 200) {
 								wikiSummary = JSON.parse(bod);
 								pageId = wikiSummary.query.pageids[0];
-								if (pageId === -1) {
+								if (pageId === '-1') {
 									bot.say(to, 'Article does not exist or could not be found. Sorry :C');
 								} else {
 									wikiSummary = wikiSummary.query.pages[pageId].extract;
