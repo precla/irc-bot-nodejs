@@ -20,6 +20,8 @@
 *
 */
 
+'use strict';
+
 var irc = require('irc'),
 	request = require('request'),
 	querystring = require('querystring'),
@@ -40,7 +42,7 @@ var bot = new irc.Client('SERVER', 'BOTNAME', {
 });
 
 // listen for pm
-bot.addListener('pm', function(nick, text, message) {
+bot.addListener('pm', function(nick) {
 	bot.say(nick, 'Type !help for a list of commands');
 });
 
@@ -53,11 +55,11 @@ bot.addListener('notice', function (nick, to, text, message) {
 	}
 });
 
-bot.addListener('message', function(nick, to, text, message) {
+bot.addListener('message', function(nick, to, text) {
 	// removes ' ' and converts into array
 	var args = text.split(' ');
 
-	if (args[0] == '!wp') {
+	if (args[0] === '!wp') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !wp NodeJS');
 		} else {
@@ -68,12 +70,12 @@ bot.addListener('message', function(nick, to, text, message) {
 			var wiki = 'https://en.wikipedia.org/w/api.php?continue=&action=query&' + title + '&indexpageids=&prop=extracts&exintro=&explaintext=&format=json';
 
 			request(wiki, function (error, response, body) {
-				if (!error && response.statusCode == 200) {
+				if (!error && response.statusCode === 200) {
 					var wikiSummary = JSON.parse(body);
 					var pageId = wikiSummary.query.pageids[0];      // get pageID
 
-					// if pageId is -1 than the article does not exist
-					if (pageId == -1) {
+					// if pageId is -1 then the article does not exist
+					if (pageId === -1) {
 
 						// Try again with changing first letter of every word to upper case
 						titleSecondTry = titleSecondTry.replace(/[^\s]+/g, function (word) {
@@ -85,17 +87,17 @@ bot.addListener('message', function(nick, to, text, message) {
 						titleSecondTry = querystring.stringify({ titles: titleSecondTry });
 
 						wiki = 'https://en.wikipedia.org/w/api.php?continue=&action=query&' + titleSecondTry + '&indexpageids=&prop=extracts&exintro=&explaintext=&format=json';
-						request(wiki, function (error, response, body) {
-							if (!error && response.statusCode == 200) {
-								wikiSummary = JSON.parse(body);
+						request(wiki, function (err, res, bod) {
+							if (!err && res.statusCode === 200) {
+								wikiSummary = JSON.parse(bod);
 								pageId = wikiSummary.query.pageids[0];
-								if (pageId == -1) {
+								if (pageId === -1) {
 									bot.say(to, 'Article does not exist or could not be found. Sorry :C');
 								} else {
 									wikiSummary = wikiSummary.query.pages[pageId].extract;
 									wikiSummary = wikiSummary.slice(0, 280);
-									checkRedirect = wikiSummary.slice(0, 70);
-									if (checkRedirect == 'This is a redirect from a title with another method of capitalisation.') {
+									var checkRedirect = wikiSummary.slice(0, 70);
+									if (checkRedirect === 'This is a redirect from a title with another method of capitalisation.') {
 										bot.say(to, 'Article is redirecting, please use the following link: https://en.wikipedia.org/wiki/' + titleSecondTry.slice(7));
 									} else {
 										wikiSummary = wikiSummary.concat('... Read more: ' + 'https://en.wikipedia.org/wiki/' + titleSecondTry.slice(7));
@@ -108,7 +110,7 @@ bot.addListener('message', function(nick, to, text, message) {
 						wikiSummary = wikiSummary.query.pages[pageId].extract;
 						wikiSummary = wikiSummary.slice(0, 280);
 						var checkRedirect = wikiSummary.slice(0, 70);
-						if (checkRedirect == 'This is a redirect from a title with another method of capitalisation.') {
+						if (checkRedirect === 'This is a redirect from a title with another method of capitalisation.') {
 							bot.say(to, 'Article is redirecting, please use the following link: https://en.wikipedia.org/wiki/' + title.slice(7));
 						} else {
 							wikiSummary = wikiSummary.concat('... Read more: ' + 'https://en.wikipedia.org/wiki/' + title.slice(7));
@@ -118,7 +120,7 @@ bot.addListener('message', function(nick, to, text, message) {
 				}
 			});
 		}
-	} else if (args[0] == '!weather') {
+	} else if (args[0] === '!weather') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !weather Moscow; !weather zip 10000,hr');
 		} else {
@@ -129,7 +131,7 @@ bot.addListener('message', function(nick, to, text, message) {
 			args.shift();
 
 			// check if user wants to search by ZIP code or by city name
-			if (args[0] == 'zip') {
+			if (args[0] === 'zip') {
 				userInput = 'zip=' + args[1];
 			} else {
 				args = args.join('');
@@ -139,13 +141,13 @@ bot.addListener('message', function(nick, to, text, message) {
 			var openweatherLink = currentWeather + userInput;
 
 			request(openweatherLink, function (error, response, body) {
-				if (!error && response.statusCode == 200) {
+				if (!error && response.statusCode === 200) {
 					var openweatherJson = JSON.parse(body);
-					if (openweatherJson.cod == 404) {
-						console.log('error while trying to get weather, "cod" code: ', openweatherJson.cod);
+					if (openweatherJson.cod === 404) {
+						console.error('error while trying to get weather, "cod" code: ', openweatherJson.cod);
 						bot.say(to, 'Not found.');
-					} else if (openweatherJson.cod == '200') {
-						// sunrise & sunset are currently not in use, uncomment if you want ot use:
+					} else if (openweatherJson.cod === 200) {
+						// sunrise & sunset are currently not in use, uncomment if you want to use:
 						// var sunrise = new Date(openweatherJson.sys.sunrise * 1000);
 						// var sunset = new Date(openweatherJson.sys.sunset * 1000);
 
@@ -156,12 +158,12 @@ bot.addListener('message', function(nick, to, text, message) {
 
 						bot.say(to, openweatherSummary);
 					} else {
-						console.log('error while trying to get weather for: ', openweatherLink);
+						console.error('error while trying to get weather for: ', openweatherLink);
 					}
 				}
 			});
 		}
-	} else if (args[0] == '!tv' || args[0] == '!next' || args[0] == '!last') {
+	} else if (args[0] === '!tv' || args[0] === '!next' || args[0] === '!last') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !tv Suits; !next Top Gear; !last The Simpsons');
 		} else {
@@ -169,15 +171,15 @@ bot.addListener('message', function(nick, to, text, message) {
 			args.shift();
 			args = args.join(' ');
 			TVRage.search(args, function (err, response) {
-				if (!err && (response['Results'] !== '0')) {
+				if (!err && response['Results'] !== '0') {
 					var showID, showSummary, showSummaryShort, tvShowLink, nextEp, lastEp, genres, airtimeOfEp;
 
 					// TVRage sometimes responds with multiple shows which are saved into array
 					// the following request is required, otherwise the bot would crash if it doesn't get a array
 					if (_.isArray(response['Results']['show'])) {
-						showID = parseInt(response['Results']['show'][0]['showid']);
+						showID = parseInt(response['Results']['show'][0]['showid'], 10);
 					} else {
-						showID = parseInt(response['Results']['show']['showid']);
+						showID = parseInt(response['Results']['show']['showid'], 10);
 					}
 
 					TVRage.fullShowInfo(showID, function (err, response) {
@@ -199,13 +201,13 @@ bot.addListener('message', function(nick, to, text, message) {
 						var userInput = querystring.stringify({ show: args });
 						var tvrageLink = 'http://services.tvrage.com/tools/quickinfo.php?' + userInput;
 						request(tvrageLink, function (error, response, body) {
-							if (!error && response.statusCode == 200) {
+							if (!error && response.statusCode === 200) {
 
 								var tvrageContent = body;
-								var tvTitle = tvrageContent.slice(tvrageContent.indexOf('Name@') + 5, tvrageContent.indexOf('Show URL@') - 1);
+								var currentTime, duration;
 
-								// get info for next episode but before that, check
-								// if show ended or canceled, than there is no upcoming episode
+								// get info for the next episode, but before that, check
+								// if the show has ended or been cancelled, then there is no upcoming episode
 								if (tvrageContent.indexOf('Status@Ended') >= '0') {
 									nextEp = tvrageContent.slice(tvrageContent.indexOf('Status@') + 7, tvrageContent.indexOf('Classification@') - 1) + '. No more episodes';
 								} else if (tvrageContent.indexOf('Next Episode@') <= '0') {
@@ -215,29 +217,29 @@ bot.addListener('message', function(nick, to, text, message) {
 									nextEp = tvrageContent.slice(tvrageContent.indexOf('Next Episode@') + 13, tvrageContent.indexOf('RFC3339@') - 1);
 
 									// get passed time from last episode
-									var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000);
+									var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000, 10);
 									var timeOfNextEp = moment.utc(unixTime);														// time from TVRage, next episode
-									var currentTime = moment.utc();																	// current time in UTC format
-									var duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
+									currentTime = moment.utc();																		// current time in UTC format
+									duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
 
-									var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * (-1)) + ' hours ' +
-														(duration.minutes() * (-1)) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
+									var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * -1) + ' hours ' +
+														(duration.minutes() * -1) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
 
 									nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
 											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
 								}
 
-								// get info for latest episode but before that, check
+								// get info for the latest episode but before that, check
 								// if there is any info about the latest episode
 								if (tvrageContent.indexOf('Latest Episode@') <= '0') {
 									lastEp = 'No info about last episode.';
 								} else {
 									lastEp = tvrageContent.slice(tvrageContent.indexOf('Latest Episode@') + 15, tvrageContent.lastIndexOf('Next Episode@'));
 
-									// get passed time from last episode
+									// get passed time from the last episode
 									var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from TVRage, last episode
-									var currentTime = moment.utc();																	// current time in UTC format
-									var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
+									currentTime = moment.utc();																	// current time in UTC format
+									duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
 									var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
 
@@ -246,11 +248,11 @@ bot.addListener('message', function(nick, to, text, message) {
 											' | Title: ' + lastEp.slice(lastEp.indexOf('^') + 1, lastEp.lastIndexOf('^'));
 								}
 
-								if (argInput == '!tv') {
+								if (argInput === '!tv') {
 									showSummary = showSummary + ' | ' + lastEp;
-								} else if (argInput == '!next') {
+								} else if (argInput === '!next') {
 									showSummary = showSummaryShort + ' | ' + nextEp + ' | ' + tvShowLink;
-								} else if (argInput == '!last') {
+								} else if (argInput === '!last') {
 									showSummary = showSummaryShort + ' | ' + lastEp + ' | ' + tvShowLink;
 								}
 								bot.say(to, showSummary);
@@ -258,12 +260,12 @@ bot.addListener('message', function(nick, to, text, message) {
 						});
 					});
 				} else {
-					console.log(err);
+					console.error(err);
 					bot.say(to, 'Not found. Try harder!');
 				}
 			});
 		}
-	} else if (args[0] == '!isup') {
+	} else if (args[0] === '!isup') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !isup imdb.com , !isup www.imdb.com ');
 		} else {
@@ -276,21 +278,21 @@ bot.addListener('message', function(nick, to, text, message) {
 			if (!urlToCheck.match(/(www\.)/g)) {
 				urlToCheck = 'www.' + urlToCheck;
 			}
-			// before request, check if url is ok, for example: www.example.123 would not allow request
+			// before request, check if URL is OK, for example: www.example.123 would not allow request
 			if (urlToCheck.match(/(www\.)\w+(\.)[a-zA-Z]/g)) {
 				request('http://www.isup.me/' + urlToCheck, function (error, response, body) {
-					if (!error && response.statusCode == 200) {
+					if (!error && response.statusCode === 200) {
 						if (body.match(/It\'s just you/g)) {
 							bot.say(to, 'Site is up!');
 						} else if (body.match(/Huh\?/g)) {
-							bot.say(to, 'Sorry pal, that url does not seem to be correct..');
+							bot.say(to, 'Sorry pal, that URL does not seem to be correct..');
 						} else {
 							bot.say(to, 'Site is down!');
 						}
 					}
 				});
 			} else {
-				bot.say(to, 'Sorry pal, that url does not seem to be correct..');
+				bot.say(to, 'Sorry pal, that URL does not seem to be correct..');
 			}
 		}
 	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)\/(gallery\/)?(\w{3,})\/?(.\w{3})?(\W\d)?/gi)) {
@@ -306,20 +308,20 @@ bot.addListener('message', function(nick, to, text, message) {
 		}
 		var requestURL = 'https://imgur.com/' + imageID;
 		request(requestURL, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				if (!error && response.statusCode == 200) {
+			if (!error && response.statusCode === 200) {
+				if (!error && response.statusCode === 200) {
 					var $ = cheerio.load(body);
 					var imageTitle = $('title').text().trim();
 					bot.say(to, c.bold('Imgur: ') + imageTitle);
 				}
 			}
 		});
-	} else if (args[0] == '!help') {
-		bot.say(nick, 'Commands available:\n!wp - wikipedia summary\n!weather - current weather\n!tv, !next, !last - for tv show info\!help');
+	} else if (args[0] === '!help') {
+		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\!help');
 	}
 
 });
 
 bot.addListener('error', function(message) {
-	console.log('error: ', message);
+	console.error('error: ', message);
 });
