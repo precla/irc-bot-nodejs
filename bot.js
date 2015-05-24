@@ -305,16 +305,10 @@ bot.addListener('message', function(nick, to, text, message) {
 		var requestURL = 'https://imgur.com/' + imageID;
 		request(requestURL, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				if (body.match(/<title>/g)) {
-					var imageTitle = body.split(/\n/gi);
-					imageTitle = imageTitle[7];
-					imageTitle = imageTitle.slice(0, imageTitle.indexOf('</title>'));
-
-					// http://stackoverflow.com/a/528786
-					imageTitle = imageTitle.replace(/&#(\d+);/g, function (m, n) {
-						return String.fromCharCode(n);
-					});
-					bot.say(to, imageTitle);
+				if (!error && response.statusCode == 200) {
+					var $ = cheerio.load(body);
+					var imageTitle = $('title').text().trim();
+					bot.say(to, c.bold('Imgur: ') + imageTitle);
 				}
 			}
 		});
