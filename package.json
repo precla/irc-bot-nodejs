@@ -1,18 +1,28 @@
 {
   "name": "irc-bot-nodejs",
   "version": "0.1.1",
-  "description": "IRC Bot for any irc",
+  "description": "IRC Bot for any IRC channel",
   "homepage": "https://github.com/precla/irc-bot-nodejs",
   "repository": {
     "type": "git",
     "url": "https://github.com/precla/irc-bot-nodejs.git"
   },
-  "author": {
-    "name": "precla",
-    "email": "precla@users.noreply.github.com"
+  "bugs": {
+    "url": "https://github.com/precla/irc-bot-nodejs/issues"
   },
+  "author": "precla <precla@users.noreply.github.com>",
   "contributors": [
     "vBm <vbm@omertabeyond.com>"
+  ],
+  "keywords": [
+    "bot",
+    "episodes",
+    "irc",
+    "shows",
+    "tv",
+    "tvrage",
+    "weather",
+    "wikipedia"
   ],
   "license": "GPL-3.0",
   "main": "bot.js",
@@ -21,22 +31,24 @@
     "test": "grunt --verbose"
   },
   "dependencies": {
+    "cheerio": "^0.19.0",
     "irc": "^0.3.12",
-    "request": "^2.55.0",
-    "tvragejson": "^0.2.1",
+    "irc-colors": "^1.1.0",
     "lodash": "^3.9.1",
     "moment": "^2.10.3",
-    "cheerio": "^0.19.0",
-    "irc-colors": "^1.1.0"
+    "request": "^2.55.0",
+    "tvragejson": "^0.2.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.2",
-    "grunt-lintspaces": "^0.6.5",
     "grunt-jscs": "^1.8.0",
+    "grunt-lintspaces": "^0.6.5",
+    "jshint-summary": "^0.4.0",
     "load-grunt-tasks": "^3.2.0",
-    "time-grunt": "^1.2.1",
-    "jshint-summary": "^0.4.0"
+    "time-grunt": "^1.2.1"
   },
-  "engine": "node 0.10.x"
+  "engines": {
+    "node": ">=0.10.0"
+  }
 }

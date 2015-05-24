@@ -56,8 +56,11 @@
 	"validateQuoteMarks": { "mark": "'", "escape": true },
 	"disallowMixedSpacesAndTabs": true,
 	"disallowTrailingWhitespace": true,
+	"disallowEmptyBlocks": true,
 	"disallowTrailingComma": true,
 	"disallowKeywordsOnNewLine": ["else"],
+	"validateIndentation": "\t",
+	"validateQuoteMarks": "'"
 	"requireSpaceAfterLineComment": true,
 	"validateJSDoc": {
 		"checkParamNames": true,
