@@ -1,4 +1,5 @@
 # irc-bot-nodejs
+
 irc-bot-nodejs is a simple IRC bot with basic functionalities
 
 ## Usage
@@ -8,10 +9,10 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 4. while in an IRC channel type any of the supported commands
 
 ## Commands:
-- `!wp <Article>` - get summary from Wikipedia for article. Example: `!wp Microsoft`
-- `!weather [zip] <City>` - get weather info for city. The `zip` argument is not required
-	example: `!weather Zagreb` or `!weather 10000,hr` will show the weather for Zagreb
-- `!tv`, `!next`, `!last <showname>` - for example: `!next Suits` - gets info about next Suits episode
+- `!wp <Article>` - get summary from Wikipedia for article. Example: `!wp Microsoft`.
+- `!weather [zip] <City>` - get weather info for city. The `zip` argument is not required.  
+	Example: `!weather Zagreb` or `!weather 10000,hr` will show the weather for Zagreb.
+- `!tv`, `!next`, `!last <showname>` - for example: `!next Suits` - gets info about the next *Suits* episode.
 
 ### To-do:
 - add more?

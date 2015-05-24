@@ -13,13 +13,23 @@ module.exports = function (grunt) {
 			}
 		},
 		jshint: {
-			src: [
-				'Gruntfile.js',
-				'bot.js'
-			],
+			files: {
+				src: [
+					'Gruntfile.js',
+					'bot.js'
+				]
+			},
 			options: {
 				jshintrc: '.jshintrc',
 				reporter: require('jshint-summary')
+			}
+		},
+		eslint: {
+			src: {
+				src: '<%= jshint.files.src %>'
+			},
+			options: {
+				config: '.eslintrc'
 			}
 		},
 		lintspaces: {
@@ -42,6 +52,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('default', [
 		'jscs',
 		'jshint',
+		'eslint',
 		'lintspaces'
 	]);
 };
