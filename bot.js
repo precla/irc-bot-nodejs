@@ -319,11 +319,9 @@ bot.addListener('message', function(nick, to, text) {
 		var requestURL = 'https://imgur.com/' + imageID;
 		request(requestURL, function (error, response, body) {
 			if (!error && response.statusCode === 200) {
-				if (!error && response.statusCode === 200) {
-					var $ = cheerio.load(body);
-					var imageTitle = $('title').text().trim();
-					bot.say(to, c.bold('Imgur: ') + imageTitle);
-				}
+				var $ = cheerio.load(body);
+				var imageTitle = $('title').text().trim();
+				bot.say(to, c.bold('Imgur: ') + imageTitle);
 			}
 		});
 	} else if (args[0] === '!help') {
