@@ -307,7 +307,7 @@ bot.addListener('message', function(nick, to, text) {
 				bot.say(to, 'Sorry pal, that URL does not seem to be correct..');
 			}
 		}
-	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)\/(gallery\/)?(\w{3,})\/?(.\w{3})?(\W\d)?/gi)) {
+	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)(\/r)?\/(\w{0,}\/)?(\w{3,})\/?(.\w{3,})?(\W\d)?/gi)) {
 		var preImageID = text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)(\/r)?\/(\w{0,}\/)?/g);
 		var imageID = text.slice(preImageID[0].length);
 
