@@ -308,16 +308,14 @@ bot.addListener('message', function(nick, to, text) {
 			}
 		}
 	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)\/(gallery\/)?(\w{3,})\/?(.\w{3})?(\W\d)?/gi)) {
-		var imageID, titleToRespond = text.split(/\//gi);
+		var preImageID = text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)(\/r)?\/(\w{0,}\/)?/g);
+		var imageID = text.slice(preImageID[0].length);
 
-		if (titleToRespond[3].match(/gallery/gi)) {
-			imageID = 'gallery/' + titleToRespond[4];
-		} else {
-			imageID = titleToRespond[3];
-		}
+		// Remove any extension (*.jpg, *.png,...)
 		if (imageID.match(/\./g)) {
 			imageID = imageID.slice(0, imageID.indexOf('.'));
 		}
+
 		var requestURL = 'https://imgur.com/' + imageID;
 		request(requestURL, function (error, response, body) {
 			if (!error && response.statusCode === 200) {
