@@ -316,7 +316,7 @@ bot.addListener('message', function(nick, to, text) {
 			imageID = imageID.slice(0, imageID.indexOf('.'));
 		}
 
-		var requestURL = 'https://imgur.com/' + imageID;
+		var requestURL = 'https://imgur.com/gallery/' + imageID;
 		request(requestURL, function (error, response, body) {
 			if (!error && response.statusCode === 200) {
 				var $ = cheerio.load(body);
