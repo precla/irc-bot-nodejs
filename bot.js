@@ -29,7 +29,12 @@ var irc = require('irc'),
 	TVRage = require('tvragejson'),
 	_ = require('lodash'),
 	cheerio = require('cheerio'),
-	c = require('irc-colors');
+	c = require('irc-colors'),
+	getYouTubeID = require('get-youtube-id'),
+	youtube = require('youtube-api'),
+	numeral = require('numeral');
+
+require('moment-duration-format');
 
 // bot config
 var bot = new irc.Client('SERVER', 'BOTNAME', {
@@ -61,6 +66,9 @@ bot.addListener('notice', function (nick, to, text, message) {
 		bot.join(bot.opt.channels.join(','));
 	}
 });
+
+// Youtube authentication key
+youtube.authenticate({type: 'key', key: 'YOUR KEY'});
 
 bot.addListener('message', function(nick, to, text) {
 	// removes ' ' and converts into array
@@ -322,6 +330,34 @@ bot.addListener('message', function(nick, to, text) {
 				var $ = cheerio.load(body);
 				var imageTitle = $('title').text().trim();
 				bot.say(to, c.bold('Imgur: ') + imageTitle);
+			}
+		});
+	} else if (text.match(/https?(:\/\/)(www.)?youtu(be|.be)?(.com)?\/(watch\?v=)?(\S+)/gi)) {
+		var ytID = getYouTubeID(text);
+
+		youtube.videos.list({
+			'part': 'snippet, contentDetails, statistics',
+			'id': ytID
+		}, function (error, data) {
+			if (!error && data.items[0]) {
+				var nsfw, contentRating = data.items[0].contentDetails.contentRating;
+				if (contentRating) {
+					if (contentRating.ytRating === 'ytAgeRestricted') {
+						nsfw = c.bold.red.bgwhite('NSFW') + ' | ';
+					} else {
+						nsfw = '';
+					}
+				} else {
+					nsfw = '';
+				}
+				var ytSummaryOutput = nsfw + 'Youtube title: ' + c.bold(data.items[0].snippet.title) +
+					' | Duration: ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false }) +
+					' | Like: ' + c.green(numeral(data.items[0].statistics.likeCount).format('0,0')) +
+					' / Dislike: ' + c.red(numeral(data.items[0].statistics.dislikeCount).format('0,0')) +
+					' | Views: ' + numeral(data.items[0].statistics.viewCount).format('0,0');
+				bot.say(to, ytSummaryOutput);
+			} else {
+				bot.say(to, 'Something went wrong while trying to get info about that Youtube video, call CSI to zoom-enchace & investigate.');
 			}
 		});
 	} else if (args[0] === '!help') {
