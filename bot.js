@@ -325,7 +325,7 @@ bot.addListener('message', function(nick, to, text) {
 			}
 		});
 	} else if (args[0] === '!help') {
-		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\!help');
+		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\n!help');
 	}
 
 });
