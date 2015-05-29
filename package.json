@@ -1,6 +1,6 @@
 {
   "name": "irc-bot-nodejs",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "IRC Bot for any IRC channel",
   "homepage": "https://github.com/precla/irc-bot-nodejs",
   "repository": {
@@ -22,7 +22,8 @@
     "tv",
     "tvrage",
     "weather",
-    "wikipedia"
+    "wikipedia",
+	"youtube"
   ],
   "license": "GPL-3.0",
   "main": "bot.js",
@@ -37,7 +38,9 @@
     "lodash": "^3.9.1",
     "moment": "^2.10.3",
     "request": "^2.55.0",
-    "tvragejson": "^0.2.1"
+    "tvragejson": "^0.2.1",
+    "youtube-api": "^0.3.2",
+    "get-youtube-id": "0.1.3"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
