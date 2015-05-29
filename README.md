@@ -17,7 +17,6 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 
 ### To-do:
 - add more? ofc!
-- add youtube URL parser
 - reconnect after disconnecting from irc
 
 ### Done:
@@ -26,6 +25,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - Isup to check if site is up
 - Imgur URL parser
 - NickServ identify
+- Youtube URL parser
 
 ### License:
 - GNU GPL v3
