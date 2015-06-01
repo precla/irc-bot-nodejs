@@ -1,3 +1,9 @@
+[![Repo Size](https://reposs.herokuapp.com/?path=precla/irc-bot-nodejs)](https://github.com/precla/irc-bot-nodejs/archive/master.zip)
+[![Build Status](https://img.shields.io/travis/precla/irc-bot-nodejs/master.svg)](https://travis-ci.org/precla/irc-bot-nodejs)
+[![Dependency Status](https://img.shields.io/david/precla/irc-bot-nodejs.svg)](https://david-dm.org/precla/irc-bot-nodejs#info=dependencies&view=table)
+[![devDependency Status](https://img.shields.io/david/dev/precla/irc-bot-nodejs.svg)](https://david-dm.org/precla/irc-bot-nodejs#info=devDependencies&view=table)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://opensource.org/licenses/GPL-3.0)
+
 # irc-bot-nodejs
 
 irc-bot-nodejs is a simple IRC bot with basic functionalities
