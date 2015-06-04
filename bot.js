@@ -22,7 +22,8 @@
 
 'use strict';
 
-var irc = require('irc'),
+var config = require('./config'),
+	irc = require('irc'),
 	request = require('request'),
 	querystring = require('querystring'),
 	moment = require('moment'),
@@ -36,21 +37,21 @@ var irc = require('irc'),
 
 require('moment-duration-format');
 
-// bot config
-var bot = new irc.Client('SERVER', 'BOTNAME', {
-	port: 7000,
-	debug: true,
-	secure: true,
-	selfSigned: true,
-	autoConnect: true,
-	userNick: 'BOTNICK',
-	userName: 'BOTNAME',
-	realName: 'BOTNAME',
-	adminNick: 'ADMIN-NICK',
-	channels: ['#YOURCHAN'],
-	showErrors: true,
-	floodProtectionDelay: 1000,
-	messageSplit: 512
+// bot configuration
+var bot = new irc.Client(config.server, config.userNick, {
+	port: config.port,
+	debug: config.debug,
+	secure: config.secure,
+	selfSigned: config.selfSigned,
+	autoConnect: config.autoConnect,
+	userNick: config.userNick,
+	userName: config.userName,
+	realName: config.realName,
+	adminNick: config.adminNick,
+	channels: config.channels,
+	showErrors: config.showErrors,
+	floodProtectionDelay: config.floodProtectionDelay,
+	messageSplit: config.messageSplit
 });
 
 // listen for pm
@@ -60,7 +61,7 @@ bot.addListener('pm', function(nick) {
 
 bot.addListener('notice', function (nick, to, text, message) {
 	if (message.args[1].match(/This nickname is registered and protected/g) !== null) {
-		bot.say('NickServ', 'identify PASSWORD');
+		bot.say('NickServ', 'identify ' + config.nickservPassword);
 	}
 	if (message.args[1].match(/Password accepted - you are now recognized./g) !== null) {
 		bot.join(bot.opt.channels.join(','));
@@ -68,7 +69,7 @@ bot.addListener('notice', function (nick, to, text, message) {
 });
 
 // Youtube authentication key
-youtube.authenticate({type: 'key', key: 'YOUR KEY'});
+youtube.authenticate({type: 'key', key: config.youtubeKey});
 
 bot.addListener('message', function(nick, to, text) {
 	// removes ' ' and converts into array
@@ -141,7 +142,7 @@ bot.addListener('message', function(nick, to, text) {
 		} else {
 			var currentWeather = 'http://api.openweathermap.org/data/2.5/weather?';
 			var metric = '&units=metric';
-			var apiKey = '&APPID=API_KEY';
+			var apiKey = '&APPID=' + config.OWapiKey;
 			var userInput;
 			args.shift();
 
