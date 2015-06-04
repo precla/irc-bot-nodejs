@@ -32,6 +32,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - Imgur URL parser
 - NickServ identify
 - Youtube URL parser
+- Separate config file for easier bot configuration & usage
 
 ### License:
 - GNU GPL v3
