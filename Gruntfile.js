@@ -6,7 +6,8 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		jscs: {
 			src: [
-				'bot.js'
+				'bot.js',
+				'config.js'
 			],
 			options: {
 				config: '.jscsrc'
@@ -16,7 +17,8 @@ module.exports = function (grunt) {
 			files: {
 				src: [
 					'Gruntfile.js',
-					'bot.js'
+					'bot.js',
+					'config.js'
 				]
 			},
 			options: {
@@ -36,7 +38,8 @@ module.exports = function (grunt) {
 			src: [
 				'Gruntfile.js',
 				'.jshintrc',
-				'bot.js'
+				'bot.js',
+				'config.js'
 			],
 			options: {
 				editorconfig: '.editorconfig',
