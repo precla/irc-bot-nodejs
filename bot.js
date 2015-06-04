@@ -60,7 +60,7 @@ bot.addListener('pm', function(nick) {
 });
 
 bot.addListener('notice', function (nick, to, text, message) {
-	if (message.args[1].match(/This nickname is registered and protected/g) !== null) {
+	if (message.args[1].match(/This nickname is registered/g) !== null) {
 		bot.say('NickServ', 'identify ' + config.nickservPassword);
 	}
 	if (message.args[1].match(/Password accepted - you are now recognized./g) !== null) {
