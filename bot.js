@@ -249,7 +249,7 @@ bot.addListener('message', function(nick, to, text) {
 
 										if (tvrageContent.match(/TBA/gi)) {
 											nextEp = 'Next episode: TBA' + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
-											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));;
+											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
 										} else {
 											nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
 											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
