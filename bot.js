@@ -371,6 +371,15 @@ bot.addListener('message', function(nick, to, text) {
 				bot.say(to, 'Something went wrong while trying to get info about that Youtube video, call CSI to zoom-enchace & investigate.');
 			}
 		});
+	} else if (text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi)) {
+		var twitterURL = text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi);
+		request(twitterURL[0], function (error, response, body) {
+			if (!error && response.statusCode === 200) {
+				var $ = cheerio.load(body);
+				var twitterTitle = $('title').text().trim();
+				bot.say(to, c.bold('Twitter: ') + twitterTitle);
+			}
+		});
 	} else if (args[0] === '!help') {
 		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\n!help');
 	}
