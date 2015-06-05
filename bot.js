@@ -247,8 +247,13 @@ bot.addListener('message', function(nick, to, text) {
 										var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * -1) + ' hours ' +
 														(duration.minutes() * -1) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
 
-										nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
+										if (tvrageContent.match(/TBA/gi)) {
+											nextEp = 'Next episode: TBA' + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
+											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));;
+										} else {
+											nextEp = 'Next Episode is in ' + timeUntilNext + ' | Number: S' + nextEp.slice(0, 2) + nextEp.slice(2, 5).replace('x', 'E') +
 											' | Title: ' + nextEp.slice(nextEp.indexOf('^') + 1, nextEp.lastIndexOf('^'));
+										}
 									}
 
 									// get info for the latest episode but before that, check
