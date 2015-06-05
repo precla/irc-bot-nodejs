@@ -22,18 +22,23 @@
 
 'use strict';
 
+// Local libs and files
+
 var config = require('./config'),
-	irc = require('irc'),
-	request = require('request'),
-	querystring = require('querystring'),
-	moment = require('moment'),
-	TVRage = require('tvragejson'),
-	_ = require('lodash'),
-	cheerio = require('cheerio'),
+
+// node modules defined in package.json
+
 	c = require('irc-colors'),
+	cheerio = require('cheerio'),
 	getYouTubeID = require('get-youtube-id'),
+	irc = require('irc'),
+	moment = require('moment'),
+	numeral = require('numeral'),
+	querystring = require('querystring'),
+	request = require('request'),
+	TVRage = require('tvragejson'),
 	youtube = require('youtube-api'),
-	numeral = require('numeral');
+	_ = require('lodash');
 
 require('moment-duration-format');
 
