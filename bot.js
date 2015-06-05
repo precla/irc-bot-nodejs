@@ -141,7 +141,7 @@ bot.addListener('message', function(nick, to, text) {
 				}
 			});
 		}
-	} else if (args[0] === '!weather') {
+	} else if (args[0] === '!weather' || args[0] === '!w') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !weather Moscow; !weather zip 10000,hr');
 		} else {
