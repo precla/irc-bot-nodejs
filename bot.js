@@ -380,6 +380,27 @@ bot.addListener('message', function(nick, to, text) {
 				bot.say(to, c.bold('Twitter: ') + twitterTitle);
 			}
 		});
+	} else if (text.match(/https?:\/\/github.com\/\S*/gi)) {
+		var githubURL = text.match(/https?:\/\/github.com\/\S*/gi);
+		request(githubURL[0], function (error, response, body) {
+			if (!error && response.statusCode === 200) {
+				var $ = cheerio.load(body);
+				var githubDescription = $('.repository-description').text().trim();
+				var githubUserFullName = $('.vcard-fullname').text().trim();
+				var githubUserNick = $('.vcard-username ').text().trim();
+				var githubOrganisationName = $('.org-name').text().trim();
+
+				if (githubDescription !== '') {
+					bot.say(to, c.bold('GitHub: ') + githubDescription);
+				} else if (githubUserFullName !== '' && githubUserNick !== '') {
+					bot.say(to, c.bold('GitHub user: ') + githubUserFullName + ' (' + githubUserNick + ')');
+				} else if (githubUserFullName === '' && githubUserNick !== '') {
+					bot.say(to, c.bold('GitHub user: ') + githubUserNick);
+				} else if (githubOrganisationName !== '') {
+					bot.say(to, c.bold('GitHub organisation: ') + githubOrganisationName);
+				}
+			}
+		});
 	} else if (args[0] === '!help') {
 		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\n!help');
 	}
