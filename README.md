@@ -10,7 +10,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 
 ## Usage
 1. install Node.js and then do `npm i`
-2. change `SERVER`, `BOTNAME`, `YOURCHAN`, `port`, `API_KEY` (for openweather), `PASSWORD` (for ident on NickServ)
+2. change settings in config.example.js and save as config.js
 3. run with: `node bot.js` or `npm run start`
 4. while in an IRC channel type any of the supported commands
 
