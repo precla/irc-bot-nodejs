@@ -20,5 +20,7 @@ module.exports = {
 	// Youtube Key
 	youtubeKey: '',
 	// Openweather API key:
-	OWapiKey: ''
+	OWapiKey: '',
+	// SoundCloud
+	soundCloudClientID: ''
 };
