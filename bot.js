@@ -401,6 +401,41 @@ bot.addListener('message', function(nick, to, text) {
 				}
 			}
 		});
+	} else if (text.match(/http?s:\/\/(www.)?soundcloud.com\/([^\/]*)\/(\S*)/gi)) {
+		var soundCloudLink = text.match(/http?s:\/\/(www.)?soundcloud.com\/([^\/]*)\/(.*)/gi);
+		request({
+				uri: soundCloudLink[0],
+				method: 'GET',
+				headers: {
+					'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
+				}
+			}, function (error, response, body) {
+				if (!error && response.statusCode === 200) {
+					var soundCloudSongID = body.match(/soundcloud:\/\/sounds:\d*/i);
+					soundCloudSongID = soundCloudSongID[0].match(/\d{6,}/g);
+
+					if (soundCloudSongID[0]) {
+						soundCloudLink = 'https://api.soundcloud.com/tracks/' + soundCloudSongID[0] + '.json?client_id=' + config.soundCloudClientID;
+						request({
+								uri: soundCloudLink,
+								method: 'GET',
+								headers: {
+									'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
+								}
+							}, function (error, response, data) {
+								if (!error && response.statusCode === 200) {
+									data = JSON.parse(data);
+
+									var soundCloudSummary = 'SoundCloud:' + c.bold(data.title) +
+										' | Duration: ' + moment.duration(data.duration).format('hh:mm:ss', { trim: false }) +
+										' | Likes: ' + c.green(numeral(data.favoritings_count).format('0,0')) +
+										' | Played: ' + c.white(numeral(data.playback_count).format('0,0')) + ' times';
+									bot.say(to, soundCloudSummary);
+								}
+							});
+					}
+				}
+			});
 	} else if (args[0] === '!help') {
 		bot.say(nick, 'Commands available:\n!wp - Wikipedia summary\n!weather - current weather\n!tv, !next, !last - for TV show info\n!help');
 	}
