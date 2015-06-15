@@ -343,7 +343,7 @@ bot.addListener('message', function(nick, to, text) {
 				bot.say(to, c.bold('Imgur: ') + imageTitle);
 			}
 		});
-	} else if (text.match(/https?(:\/\/)(www.)?youtu(be|.be)?(.com)?\/(watch\?v=)?(\S+)/gi)) {
+	} else if (text.match(/(https?(:\/\/))?(www.)?youtu(be|.be)?(.com)?\/(watch\?v=)?(\S+)/gi)) {
 		var ytID = getYouTubeID(text);
 
 		youtube.videos.list({
