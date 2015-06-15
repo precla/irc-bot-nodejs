@@ -29,10 +29,9 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - Weather command
 - TVRage
 - Isup to check if site is up
-- Imgur URL parser
 - NickServ identify
 - Separate config file for easier bot configuration & usage
-- URL parser for: Github, SoundCloud, Twitter, Youtube
+- URL parser for: Github, SoundCloud, Twitter, Youtube, Imgur
 
 ### License:
 - GNU GPL v3
