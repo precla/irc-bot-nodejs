@@ -42,7 +42,7 @@
     "numeral": "^1.5.3",
     "request": "^2.57.0",
     "tvragejson": "^0.2.1",
-    "youtube-api": "^0.3.2"
+    "youtube-api": "^1.0.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
