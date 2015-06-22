@@ -326,21 +326,20 @@ bot.addListener('message', function(nick, to, text) {
 				bot.say(to, 'Sorry pal, that URL does not seem to be correct..');
 			}
 		}
-	} else if (text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)(\/r)?\/(\w{0,}\/)?(\w{3,})\/?(.\w{3,})?(\W\d)?/gi)) {
-		var preImageID = text.match(/https?(:\/\/)(i\.imgur.com|imgur.com)(\/r)?\/(\w{0,}\/)?/g);
-		var imageID = text.slice(preImageID[0].length);
+	} else if (text.match(/(http|https):\/\/(i\.imgur|imgur)\.(com\/gallery\/|com\/r\/(\S+)\/|com\/)(\S+)/g)) {
+		var imgurR = /(?:http|https):\/\/(?:i\.imgur|imgur)\.(?:com\/gallery\/|com\/r\/(?:\S+)\/|com\/)(\S+)/g;
 
-		// Remove any extension (*.jpg, *.png,...)
-		if (imageID.match(/\./g)) {
-			imageID = imageID.slice(0, imageID.indexOf('.'));
-		}
+		var imageID = imgurR.exec(text)[1];
+		imageID = /[^.]*/.exec(imageID)[0];
 
 		var requestURL = 'https://imgur.com/gallery/' + imageID;
 		request(requestURL, function (error, response, body) {
 			if (!error && response.statusCode === 200) {
 				var $ = cheerio.load(body);
 				var imageTitle = $('title').text().trim();
-				bot.say(to, c.bold('Imgur: ') + imageTitle);
+				if (imageTitle !== 'Imgur') {
+					bot.say(to, c.bold('Imgur: ') + imageTitle.replace(' - Imgur', ''));
+				}
 			}
 		});
 	} else if (text.match(/(https?(:\/\/))?(www.)?youtu(be|.be)?(.com)?\/(watch\?v=)?(\S+)/gi)) {
