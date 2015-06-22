@@ -31,7 +31,8 @@ module.exports = function (grunt) {
 				src: '<%= jshint.files.src %>'
 			},
 			options: {
-				config: '.eslintrc'
+				config: '.eslintrc',
+				format: require('eslint-stylish-config')
 			}
 		},
 		lintspaces: {
