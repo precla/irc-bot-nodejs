@@ -225,7 +225,7 @@ bot.addListener('message', function(nick, to, text) {
 							request(tvrageLink, function (error, response, body) {
 								if (!error && response.statusCode === 200) {
 
-									var tvrageContent = body;
+									var tvrageContent = body, currentTime, duration;
 
 									// get info for the next episode, but before that, check
 									// if the show has ended or been canceled, then there is no upcoming episode
@@ -240,8 +240,8 @@ bot.addListener('message', function(nick, to, text) {
 										// get passed time from last episode
 										var unixTime = parseInt(tvrageContent.slice(tvrageContent.indexOf('NODST@') + 6, tvrageContent.indexOf('Country@') - 1) * 1000, 10);
 										var timeOfNextEp = moment.utc(unixTime);														// time from TVRage, next episode
-										var currentTime = moment.utc();																	// current time in UTC format
-										var duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
+										currentTime = moment.utc();																	// current time in UTC format
+										duration = moment.duration(currentTime - timeOfNextEp, 'milliseconds');
 
 										var timeUntilNext = timeOfNextEp.diff(currentTime, 'days') + ' days ' + (duration.hours() * (-1)) + ' hours ' +
 															(duration.minutes() * (-1)) + ' mins (' + moment.utc(unixTime).format('DD-MM-YYYY HH:mm') + ' UTC)';
@@ -264,8 +264,8 @@ bot.addListener('message', function(nick, to, text) {
 
 										// get passed time from the last episode
 										var timeOfLastEp = moment.utc(lastEp.slice(-12, -1) + airtimeOfEp, 'MMM-DD-YYYY HH:mm');		// time from TVRage, last episode
-										var currentTime = moment.utc();																	// current time in UTC format
-										var duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
+										currentTime = moment.utc();																	// current time in UTC format
+										duration = moment.duration(currentTime - timeOfLastEp, 'milliseconds');
 
 										var timeFromLast = currentTime.diff(timeOfLastEp, 'days') + ' days ' + duration.hours() + ' hours ' + duration.minutes() + ' mins ';
 
