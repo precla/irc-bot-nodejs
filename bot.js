@@ -37,6 +37,7 @@ var config = require('./config'),
 	querystring = require('querystring'),
 	request = require('request'),
 	TVRage = require('tvragejson'),
+	Twitter = require('twitter'),
 	youtube = require('youtube-api'),
 	_ = require('lodash');
 
