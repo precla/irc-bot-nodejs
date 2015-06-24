@@ -42,6 +42,7 @@
     "numeral": "^1.5.3",
     "request": "^2.58.0",
     "tvragejson": "^0.2.1",
+    "twitter": "^1.2.5",
     "youtube-api": "^1.0.0"
   },
   "devDependencies": {
