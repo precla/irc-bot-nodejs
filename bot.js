@@ -357,12 +357,17 @@ bot.addListener('message', function(nick, to, text) {
 				} else {
 					nsfw = '';
 				}
+				/*
 				var ytSummaryOutput = nsfw + 'Youtube title: ' + c.bold(data.items[0].snippet.title) +
 					' | Duration: ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false }) +
 					' | Like: ' + c.green(numeral(data.items[0].statistics.likeCount).format('0,0')) +
 					' / Dislike: ' + c.red(numeral(data.items[0].statistics.dislikeCount).format('0,0')) +
 					' | Views: ' + numeral(data.items[0].statistics.viewCount).format('0,0');
-				bot.say(to, ytSummaryOutput);
+				*/
+
+				var ytSummaryOutput = nsfw + 'Youtube title: ' + c.bold(data.items[0].snippet.title) +
+					' | User: ' + data.items[0].snippet.channelTitle +
+					' | Duration: ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false });
 			} else {
 				bot.say(to, 'Something went wrong while trying to get info about that Youtube video, call CSI to zoom-enchace & investigate.');
 			}
