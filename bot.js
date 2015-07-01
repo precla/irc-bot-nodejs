@@ -365,9 +365,11 @@ bot.addListener('message', function(nick, to, text) {
 					' | Views: ' + numeral(data.items[0].statistics.viewCount).format('0,0');
 				*/
 
-				var ytSummaryOutput = nsfw + 'Youtube title: ' + c.bold(data.items[0].snippet.title) +
-					' | User: ' + data.items[0].snippet.channelTitle +
-					' | Duration: ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false });
+				var ytSummaryOutput = nsfw + c.bold('Youtube | ') + c.underline(data.items[0].snippet.title) +
+					' by ' + c.bold(data.items[0].snippet.channelTitle) +
+					' | ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false });
+
+				bot.say(to, ytSummaryOutput);
 			} else {
 				bot.say(to, 'Something went wrong while trying to get info about that Youtube video, call CSI to zoom-enchace & investigate.');
 			}
