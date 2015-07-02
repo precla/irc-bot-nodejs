@@ -37,7 +37,6 @@ var config = require('./config'),
 	querystring = require('querystring'),
 	request = require('request'),
 	TVRage = require('tvragejson'),
-	twitter = require('twitter'),
 	youtube = require('youtube-api'),
 	_ = require('lodash');
 
@@ -375,40 +374,12 @@ bot.addListener('message', function(nick, to, text) {
 			}
 		});
 	} else if (text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi)) {
-		var twitterText = text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi)[0];
-		var twitterUser = twitterText.split('/')[3];
-		var twitterStatusID = twitterText.split('/')[5];
-		var twitterPath, twitterParam, twitterOutput;
-
-		if (!twitterStatusID) {
-			twitterPath = 'users/show';
-			twitterParam = {
-				screen_name: twitterUser
-			};
-		} else {
-			twitterPath = 'statuses/show/';
-			twitterParam = {
-				id: twitterStatusID
-			};
-		}
-
-		twitter.get(
-			twitterPath, twitterParam, function(error, tweets, response) {
+		var twitterURL = text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi);
+		request(twitterURL[0], function (error, response, body) {
 			if (!error && response.statusCode === 200) {
-				if (!tweets.text) {
-					var desc;
-					if (tweets.description !== '') {
-						desc = ' ' + tweets.description + ' | ';
-					} else {
-						desc = ' ';
-					}
-					twitterOutput = c.bold('[' + tweets.name + ']') + desc + 'Following: ' + tweets.friends_count + ' | Followers: ' + tweets.followers_count + ' | Tweets posted: ' + tweets.statuses_count;
-				} else {
-					twitterOutput = c.bold('[' + tweets.user.name + ']') + ' said "' + tweets.text + '" ' + c.bold(moment(tweets.created_at).fromNow());
-				}
-				bot.say(to, twitterOutput);
-			} else {
-				console.error(error);
+				var $ = cheerio.load(body);
+				var twitterTitle = $('title').text().trim();
+				bot.say(to, c.bold('Twitter: ') + twitterTitle);
 			}
 		});
 	} else if (text.match(/https?:\/\/github.com\/\S*/gi)) {
