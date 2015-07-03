@@ -180,6 +180,7 @@ bot.addListener('message', function(nick, to, text) {
 						bot.say(to, openweatherSummary);
 					} else {
 						console.error('error while trying to get weather for: ', openweatherLink);
+						bot.say(to, 'Sorry, no weather info for that one.');
 					}
 				}
 			});
