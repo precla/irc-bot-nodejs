@@ -164,10 +164,10 @@ bot.addListener('message', function(nick, to, text) {
 			request(openweatherLink, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					var openweatherJson = JSON.parse(body);
-					if (openweatherJson.cod === "404") {
+					if (openweatherJson.cod === '404') {
 						console.error('error while trying to get weather, "cod" code: ', openweatherJson.cod);
 						bot.say(to, 'Sorry, no weather info for that one.');
-					} else if (openweatherJson.cod === "200") {
+					} else if (openweatherJson.cod === '200') {
 						// sunrise & sunset are currently not in use, uncomment if you want to use:
 						// var sunrise = new Date(openweatherJson.sys.sunrise * 1000);
 						// var sunset = new Date(openweatherJson.sys.sunset * 1000);
