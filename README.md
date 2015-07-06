@@ -23,7 +23,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 
 ### To-do:
 - add more? ofc!
-- reconnect after disconnecting from irc
+- reconnect after disconnecting from irc (until then, use: [foreverjs/forever](https://github.com/foreverjs/forever) ) 
 
 ### Done:
 - Weather command
