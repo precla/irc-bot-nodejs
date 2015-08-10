@@ -367,7 +367,7 @@ bot.addListener('message', function(nick, to, text) {
 
 				var ytSummaryOutput = nsfw + c.bold('Youtube | ') + c.underline(data.items[0].snippet.title) +
 					' by ' + c.bold(data.items[0].snippet.channelTitle) +
-					' | ' + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false });
+					c.bold(' | ') + moment.duration(data.items[0].contentDetails.duration).format('hh:mm:ss', { trim: false });
 
 				bot.say(to, ytSummaryOutput);
 			} else {
