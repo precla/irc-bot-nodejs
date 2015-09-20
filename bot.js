@@ -343,8 +343,8 @@ bot.addListener('message', function(nick, to, text) {
 		var ytID = getYouTubeID(text);
 
 		youtube.videos.list({
-			'part': 'snippet, contentDetails, statistics',
-			'id': ytID
+			part: 'snippet, contentDetails, statistics',
+			id: ytID
 		}, function (error, data) {
 			if (!error && data.items[0]) {
 				var nsfw, contentRating = data.items[0].contentDetails.contentRating;
