@@ -37,7 +37,6 @@
     "get-youtube-id": "^1.0.0",
     "irc": "^0.4.0",
     "irc-colors": "^1.2.0",
-    "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "moment-countdown": "^0.0.3",
     "moment-duration-format": "^1.3.0",
