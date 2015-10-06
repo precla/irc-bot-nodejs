@@ -202,7 +202,7 @@ bot.addListener('message', function(nick, to, text) {
 			request(TVMazeAPI, function(error, response, body) {
 				var showSummary;
 				if (!error && response.statusCode === 200) {
-					var body = JSON.parse(body);
+					body = JSON.parse(body);
 					var showName = body.name,
 						showUrl = body.url,
 						showGenre = 'Genre: ' + body.genres.join(', '),
