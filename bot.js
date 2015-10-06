@@ -36,8 +36,7 @@ var config = require('./config'),
 	numeral = require('numeral'),
 	querystring = require('querystring'),
 	request = require('request'),
-	youtube = require('youtube-api'),
-	_ = require('lodash');
+	youtube = require('youtube-api');
 
 require('moment-countdown');
 require('moment-duration-format');
