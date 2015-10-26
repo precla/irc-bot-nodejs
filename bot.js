@@ -46,6 +46,9 @@ require('moment-duration-format');
 var zeroPad = function (number) {
 	return (number < 10) ? ('0' + number) : number;
 };
+var nanToZero = function (number) {
+	return isNaN(number) ? 0 : number;
+};
 
 // bot configuration
 var bot = new irc.Client(config.server, config.userNick, {
@@ -402,7 +405,7 @@ bot.addListener('message', function(nick, to, text) {
 			});
 	} else if (args[0] === '!csgo') {
 		var API = 'http://api.steampowered.com';
-		var appid = '?key=' + confAPI.steam;
+		var appid = '?key=' + config.steam;
 		var chanoutput;
 		if (!args[1]) {
 			bot.say(to, 'You have to supply user name in order to see some stats.');
@@ -410,7 +413,7 @@ bot.addListener('message', function(nick, to, text) {
 			request({
 				uri: API + '/ISteamUser/ResolveVanityURL/v0001/' + appid + '&vanityurl=' + args[1],
 				headers: {
-					'User-Agent': myUA
+					'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
 				}
 			}, function(error, response, body) {
 				var uSteam = JSON.parse(body);
@@ -420,7 +423,7 @@ bot.addListener('message', function(nick, to, text) {
 					request({
 						uri: API + '/ISteamUserStats/GetUserStatsForGame/v0002/' + appid + '&appid=730&steamid=' + uSteamID,
 						headers: {
-							'User-Agent': myUA
+							'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
 						}
 					}, function(error, response, body) {
 						var gameStats = JSON.parse(body);
@@ -430,17 +433,17 @@ bot.addListener('message', function(nick, to, text) {
 						});
 						var kills = getStats['total_kills'];
 						var deaths = getStats['total_deaths'];
-						var KDR = tools.nanToZero((kills / deaths).toFixed(2));
+						var KDR = nanToZero((kills / deaths).toFixed(2));
 						var playTime = moment.duration(getStats['total_time_played'], 'seconds').format('h [hrs] m [min]');
 						var hits = getStats['total_shots_hit'];
 						var shots = getStats['total_shots_fired'];
-						var accuracy = tools.nanToZero(((hits / shots) * 100).toFixed(2));
+						var accuracy = nanToZero(((hits / shots) * 100).toFixed(2));
 						var headShots = getStats['total_kills_headshot'];
-						var headShotsPerc = tools.nanToZero(((headShots / kills) * 100).toFixed(2));
+						var headShotsPerc = nanToZero(((headShots / kills) * 100).toFixed(2));
 						var MVP = getStats['total_mvps'];
 						var battles = getStats['total_rounds_played'];
 						var wins = getStats['total_wins'];
-						var winRate = tools.nanToZero(((wins / battles) * 100).toFixed(2));
+						var winRate = nanToZero(((wins / battles) * 100).toFixed(2));
 
 						chanoutput = '[' + c.bold(args[1]) + '] Played: ' + playTime + ' | Battles: ' +
 								battles + ' [won: ' + wins + ' (' + winRate + '%) | Accuracy: ' + accuracy +
