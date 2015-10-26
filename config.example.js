@@ -23,4 +23,6 @@ module.exports = {
 	OWapiKey: '',
 	// SoundCloud
 	soundCloudClientID: ''
+	// Steam dev key https://steamcommunity.com/dev
+	steam: ''
 };
