@@ -41,19 +41,19 @@
     "moment-countdown": "^0.0.3",
     "moment-duration-format": "^1.3.0",
     "numeral": "^1.5.3",
-    "request": "^2.64.0",
-    "youtube-api": "^1.2.0"
+    "request": "^2.65.0",
+    "youtube-api": "^1.2.1"
   },
   "devDependencies": {
     "eslint-stylish-config": "^0.0.2",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.3",
-    "grunt-eslint": "^17.2.0",
-    "grunt-jscs": "^2.1.0",
-    "grunt-lintspaces": "^0.7.0",
+    "grunt-eslint": "^17.3.1",
+    "grunt-jscs": "^2.2.0",
+    "grunt-lintspaces": "^0.7.1",
     "jshint-summary": "^0.4.0",
     "load-grunt-tasks": "^3.3.0",
-    "time-grunt": "^1.2.1"
+    "time-grunt": "^1.2.2"
   },
   "engines": {
     "node": ">=0.12.0"
