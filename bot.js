@@ -426,7 +426,7 @@ bot.addListener('message', function(nick, to, text) {
 						var gameStats = JSON.parse(body);
 						var getStats = {};
 						gameStats.playerstats.stats.forEach(function (el) {
-						    getStats[el.name] = el.value;
+							getStats[el.name] = el.value;
 						});
 						var kills = getStats['total_kills'];
 						var deaths = getStats['total_deaths'];
