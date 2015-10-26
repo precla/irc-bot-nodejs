@@ -36,7 +36,8 @@ var config = require('./config'),
 	numeral = require('numeral'),
 	querystring = require('querystring'),
 	request = require('request'),
-	youtube = require('youtube-api');
+	youtube = require('youtube-api'),
+	_ = require('lodash');
 
 require('moment-countdown');
 require('moment-duration-format');
@@ -427,28 +428,32 @@ bot.addListener('message', function(nick, to, text) {
 						}
 					}, function(error, response, body) {
 						var gameStats = JSON.parse(body);
-						var getStats = {};
-						gameStats.playerstats.stats.forEach(function (el) {
-							getStats[el.name] = el.value;
-						});
-						var kills = getStats['total_kills'];
-						var deaths = getStats['total_deaths'];
-						var KDR = nanToZero((kills / deaths).toFixed(2));
-						var playTime = moment.duration(getStats['total_time_played'], 'seconds').format('h [hrs] m [min]');
-						var hits = getStats['total_shots_hit'];
-						var shots = getStats['total_shots_fired'];
-						var accuracy = nanToZero(((hits / shots) * 100).toFixed(2));
-						var headShots = getStats['total_kills_headshot'];
-						var headShotsPerc = nanToZero(((headShots / kills) * 100).toFixed(2));
-						var MVP = getStats['total_mvps'];
-						var battles = getStats['total_rounds_played'];
-						var wins = getStats['total_wins'];
-						var winRate = nanToZero(((wins / battles) * 100).toFixed(2));
+						if (_.isEmpty(gameStats) !== true) {
+							var getStats = {};
+							gameStats.playerstats.stats.forEach(function (el) {
+								getStats[el.name] = el.value;
+							});
+							var kills = getStats['total_kills'];
+							var deaths = getStats['total_deaths'];
+							var KDR = nanToZero((kills / deaths).toFixed(2));
+							var playTime = moment.duration(getStats['total_time_played'], 'seconds').format('h [hrs] m [min]');
+							var hits = getStats['total_shots_hit'];
+							var shots = getStats['total_shots_fired'];
+							var accuracy = nanToZero(((hits / shots) * 100).toFixed(2));
+							var headShots = getStats['total_kills_headshot'];
+							var headShotsPerc = nanToZero(((headShots / kills) * 100).toFixed(2));
+							var MVP = getStats['total_mvps'];
+							var battles = getStats['total_rounds_played'];
+							var wins = getStats['total_wins'];
+							var winRate = nanToZero(((wins / battles) * 100).toFixed(2));
 
-						chanoutput = '[' + c.bold(args[1]) + '] Played: ' + playTime + ' | Battles: ' +
-								battles + ' [won: ' + wins + ' (' + winRate + '%) | Accuracy: ' + accuracy +
-								'% | K/D: ' + KDR + ' [kills: ' + kills + ' - HeadShots: ' + headShots +
-								' (' + headShotsPerc + '%)] | MVP: ' + MVP;
+							chanoutput = '[' + c.bold(args[1]) + '] Played: ' + playTime + ' | Battles: ' +
+									battles + ' [won: ' + wins + ' (' + winRate + '%) | Accuracy: ' + accuracy +
+									'% | K/D: ' + KDR + ' [kills: ' + kills + ' - HeadShots: ' + headShots +
+									' (' + headShotsPerc + '%)] | MVP: ' + MVP;
+						} else {
+							chanoutput = 'Maybe ' + c.bold(args[1]) + ' hasn\'t played CS:GO yet, or this profile is not public.';
+						}
 						bot.say(to, chanoutput);
 					});
 				} else {
