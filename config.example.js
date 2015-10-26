@@ -22,7 +22,7 @@ module.exports = {
 	// Openweather API key:
 	OWapiKey: '',
 	// SoundCloud
-	soundCloudClientID: ''
+	soundCloudClientID: '',
 	// Steam dev key https://steamcommunity.com/dev
 	steam: ''
 };
