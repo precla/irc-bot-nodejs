@@ -23,7 +23,8 @@
     "tvrage",
     "weather",
     "wikipedia",
-    "youtube"
+    "youtube",
+	"csgo"
   ],
   "license": "GPL-3.0",
   "main": "bot.js",
