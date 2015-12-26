@@ -345,7 +345,9 @@ bot.addListener('message', function(nick, to, text) {
 			if (!error && response.statusCode === 200) {
 				var $ = cheerio.load(body);
 				var twitterTitle = $('title').text().trim();
-				bot.say(to, c.bold('Twitter: ') + twitterTitle);
+				twitterTitle = twitterTitle.split(':');
+				var twitterTitleText = twitterTitle[1].split('http')[0].substring(2);
+				bot.say(to, 'Twitter' + c.bold(' | ' + twitterTitle[0].split(' on Twitter')[0] + ' | ') + twitterTitleText);
 			}
 		});
 	} else if (text.match(/https?:\/\/github.com\/\S*/gi)) {
