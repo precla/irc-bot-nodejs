@@ -436,17 +436,17 @@ bot.addListener('message', function(nick, to, text) {
 							});
 							var kills = getStats['total_kills'];
 							var deaths = getStats['total_deaths'];
-							var KDR = tools.nanToZero((kills / deaths).toFixed(2));
+							var KDR = nanToZero((kills / deaths).toFixed(2));
 							var playTime = moment.duration(getStats['total_time_played'], 'seconds').format('h [hrs] m [min]');
 							var hits = getStats['total_shots_hit'];
 							var shots = getStats['total_shots_fired'];
-							var accuracy = tools.nanToZero(((hits / shots) * 100).toFixed(2));
+							var accuracy = nanToZero(((hits / shots) * 100).toFixed(2));
 							var headShots = getStats['total_kills_headshot'];
-							var headShotsPerc = tools.nanToZero(((headShots / kills) * 100).toFixed(2));
+							var headShotsPerc = nanToZero(((headShots / kills) * 100).toFixed(2));
 							var MVP = getStats['total_mvps'];
 							var battles = getStats['total_rounds_played'];
 							var wins = getStats['total_wins'];
-							var winRate = tools.nanToZero(((wins / battles) * 100).toFixed(2));
+							var winRate = nanToZero(((wins / battles) * 100).toFixed(2));
 
 							request({
 								uri: API + '/ISteamUser/GetPlayerSummaries/v0002/' + appid + '&appid=730&steamids=' + uSteamID,
