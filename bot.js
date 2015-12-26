@@ -413,52 +413,60 @@ bot.addListener('message', function(nick, to, text) {
 		} else {
 			request({
 				uri: API + '/ISteamUser/ResolveVanityURL/v0001/' + appid + '&vanityurl=' + args[1],
-				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
-				}
+				json: true
 			}, function(error, response, body) {
-				var uSteam = JSON.parse(body);
 				var uSteamID;
-				if (uSteam.response.success === 1) {
-					uSteamID = uSteam.response.steamid;
-					request({
-						uri: API + '/ISteamUserStats/GetUserStatsForGame/v0002/' + appid + '&appid=730&steamid=' + uSteamID,
-						headers: {
-							'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0'
-						}
-					}, function(error, response, body) {
-						var gameStats = JSON.parse(body);
-						if (_.isEmpty(gameStats) !== true) {
+				if (body.response.success === 1) {
+					uSteamID = body.response.steamid;
+				} else {
+					if (args[1].match(/\d{17}/)) {
+						uSteamID = args[1];
+					}
+				}
+
+				request({
+					uri: API + '/ISteamUserStats/GetUserStatsForGame/v0002/' + appid + '&appid=730&steamid=' + uSteamID,
+					json: true
+				}, function(error, response, body) {
+					if (!error && response.statusCode === 200) {
+						if (_.isEmpty(body) !== true) {
 							var getStats = {};
-							gameStats.playerstats.stats.forEach(function (el) {
+							body.playerstats.stats.forEach(function (el) {
 								getStats[el.name] = el.value;
 							});
 							var kills = getStats['total_kills'];
 							var deaths = getStats['total_deaths'];
-							var KDR = nanToZero((kills / deaths).toFixed(2));
+							var KDR = tools.nanToZero((kills / deaths).toFixed(2));
 							var playTime = moment.duration(getStats['total_time_played'], 'seconds').format('h [hrs] m [min]');
 							var hits = getStats['total_shots_hit'];
 							var shots = getStats['total_shots_fired'];
-							var accuracy = nanToZero(((hits / shots) * 100).toFixed(2));
+							var accuracy = tools.nanToZero(((hits / shots) * 100).toFixed(2));
 							var headShots = getStats['total_kills_headshot'];
-							var headShotsPerc = nanToZero(((headShots / kills) * 100).toFixed(2));
+							var headShotsPerc = tools.nanToZero(((headShots / kills) * 100).toFixed(2));
 							var MVP = getStats['total_mvps'];
 							var battles = getStats['total_rounds_played'];
 							var wins = getStats['total_wins'];
-							var winRate = nanToZero(((wins / battles) * 100).toFixed(2));
+							var winRate = tools.nanToZero(((wins / battles) * 100).toFixed(2));
 
-							chanoutput = '[' + c.bold(args[1]) + '] Played: ' + playTime + ' | Battles: ' +
+							request({
+								uri: API + '/ISteamUser/GetPlayerSummaries/v0002/' + appid + '&appid=730&steamids=' + uSteamID,
+								json: true
+							}, function(error, response, body) {
+								var userName = body.response.players[0].personaname;
+								chanoutput = '[' + c.bold(userName) + '] Played: ' + playTime + ' | Battles: ' +
 									battles + ' [won: ' + wins + ' (' + winRate + '%) | Accuracy: ' + accuracy +
 									'% | K/D: ' + KDR + ' [kills: ' + kills + ' - HeadShots: ' + headShots +
 									' (' + headShotsPerc + '%)] | MVP: ' + MVP;
+								bot.say(to, chanoutput);
+							});
 						} else {
 							chanoutput = 'Maybe ' + c.bold(args[1]) + ' hasn\'t played CS:GO yet, or this profile is not public.';
 						}
-						bot.say(to, chanoutput);
-					});
-				} else {
-					chanoutput = 'API doesn\'t return any match for requested name (' + args[1] + ')';
-				}
+					} else {
+						chanoutput = 'Something went wrong on the API server. Status code: ' + response.statusCode;
+					}
+					bot.say(to, chanoutput);
+				});
 				bot.say(to, chanoutput);
 			});
 		}
