@@ -20,6 +20,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 	Example: `!weather Zagreb` or `!weather 10000,hr` will show the weather for Zagreb.
 - `!tv`, `!next`, `!last <showname>` - Example: `!next Suits` - gets info about the next *Suits* episode.
 - `!isup` - checks if a specified site is up. Example: `!isup www.github.com`
+- `!csgo` - get player info for the game Counter-Strike: Global Offensive
 
 ### To-do:
 - add more? ofc!
@@ -32,6 +33,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - NickServ identify
 - Separate config file for easier bot configuration & usage
 - URL parser for: Github, SoundCloud, Twitter, Youtube, Imgur
+- Counter-Strike: Global Offensive player info
 
 ### License:
 - GNU GPL v3
