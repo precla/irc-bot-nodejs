@@ -57,6 +57,5 @@ module.exports = function (grunt) {
 		'jscs',
 		'jshint',
 		'eslint',
-		'lintspaces'
 	]);
 };
