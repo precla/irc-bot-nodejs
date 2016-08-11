@@ -3,7 +3,8 @@ module.exports = {
 	server: 'SERVER',
 	port: 7000,
 	secure: true,
-	selfSigned: true,
+	selfSigned: true,	// accept self signed certificate
+	certExpired: true,	// accept expired certificate
 	autoConnect: true,
 	userNick: 'BOTNICK',
 	userName: 'BOTNAME',

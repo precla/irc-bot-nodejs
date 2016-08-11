@@ -57,6 +57,7 @@ var bot = new irc.Client(config.server, config.userNick, {
 	debug: config.debug,
 	secure: config.secure,
 	selfSigned: config.selfSigned,
+	certExpired: config.certExpired,
 	autoConnect: config.autoConnect,
 	userNick: config.userNick,
 	userName: config.userName,
