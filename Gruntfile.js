@@ -34,18 +34,6 @@ module.exports = function (grunt) {
 				config: '.eslintrc',
 				format: require('eslint-stylish-config')
 			}
-		},
-		lintspaces: {
-			src: [
-				'Gruntfile.js',
-				'.jshintrc',
-				'bot.js',
-				'config.js'
-			],
-			options: {
-				editorconfig: '.editorconfig',
-				ignores: ['js-comments']
-			}
 		}
 	});
 
