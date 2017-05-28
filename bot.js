@@ -151,6 +151,20 @@ bot.addListener('message', function(nick, to, text) {
 				}
 			});
 		}
+	} else if (args[0] === '!google' || args[0] === '!g') {
+		if(!args[1]){
+			bot.say(to, 'Missing arguments. Usage example: !g Terry Pratchett');
+		} else {
+			args.shift();
+			args = args.join(' ');
+			google(args, function (err, res){
+				if (err){
+					console.error(err)
+				}
+
+				bot.say(to, res.links[0].title + ' | ' + res.links[0].description + ' | ' + res.links[0].href)
+			})
+		}
 	} else if (args[0] === '!weather' || args[0] === '!w') {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !weather Moscow; !weather zip 10000,hr');

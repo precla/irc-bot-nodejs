@@ -36,6 +36,7 @@
     "cheerio": "^0.20.0",
     "countdown": "^2.6.0",
     "get-youtube-id": "^1.0.0",
+    "google": "^2.1.0",
     "irc": "^0.5.0",
     "irc-colors": "^1.2.0",
     "lodash": "^4.2.1",
