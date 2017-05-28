@@ -21,6 +21,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - `!tv`, `!next`, `!last <showname>` - Example: `!next Suits` - gets info about the next *Suits* episode.
 - `!isup` - checks if a specified site is up. Example: `!isup www.github.com`
 - `!csgo` - get player info for the game Counter-Strike: Global Offensive
+- `!g`, `!google` - search via google and show first result
 
 ### To-do:
 - add more? ofc!
