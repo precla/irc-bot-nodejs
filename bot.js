@@ -37,7 +37,8 @@ var config = require('./config'),
 	querystring = require('querystring'),
 	request = require('request'),
 	youtube = require('youtube-api'),
-	_ = require('lodash');
+	_ = require('lodash'),
+	google = require('google');
 
 require('moment-countdown');
 require('moment-duration-format');
@@ -159,10 +160,10 @@ bot.addListener('message', function(nick, to, text) {
 			args = args.join(' ');
 			google(args, function (err, res) {
 				if (err) {
-					console.error(err)
+					console.error(err);
 				}
-				bot.say(to, res.links[0].title + ' | ' + res.links[0].description + ' | ' + res.links[0].href)
-			})
+				bot.say(to, res.links[0].title + ' | ' + res.links[0].description + ' | ' + res.links[0].href);
+			});
 		}
 	} else if (args[0] === '!weather' || args[0] === '!w') {
 		if (!args[1]) {
