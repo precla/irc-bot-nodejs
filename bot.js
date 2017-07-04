@@ -351,7 +351,7 @@ bot.addListener('message', function(nick, to, text) {
 
 				bot.say(to, ytSummaryOutput);
 			} else {
-				bot.say(to, 'Something went wrong while trying to get info about that Youtube video, call CSI to zoom-enchace & investigate.');
+				bot.say(to, 'Something went wrong while trying to get information about that Youtube video, call CSI to zoom-enhance & investigate.');
 			}
 		});
 	} else if (text.match(/https?:\/\/twitter.com\/\w*(\/status\/\d*)?/gi)) {
@@ -426,7 +426,7 @@ bot.addListener('message', function(nick, to, text) {
 		var appid = '?key=' + config.steam;
 		var chanoutput;
 		if (!args[1]) {
-			bot.say(to, 'You have to supply user name in order to see some stats.');
+			bot.say(to, 'You have to supply an user name in order to see some stats.');
 		} else {
 			request({
 				uri: API + '/ISteamUser/ResolveVanityURL/v0001/' + appid + '&vanityurl=' + args[1],
