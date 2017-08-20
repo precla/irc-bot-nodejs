@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
-* (C) 2015 precla
+* (C) 2017 precla
 *
 * This file is part of irc-bot-nodejs.
 *
