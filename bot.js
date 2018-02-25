@@ -34,6 +34,7 @@ var config = require('./config'),
 	irc = require('irc'),
 	moment = require('moment'),
 	numeral = require('numeral'),
+	ontime = require('ontime'),
 	querystring = require('querystring'),
 	request = require('request'),
 	youtube = require('youtube-api'),
@@ -493,6 +494,28 @@ bot.addListener('message', function(nick, to, text) {
 						'!csgo - CSGO Profile statistic\n!help\n' +
 						'\nBot grabs titles for the following links posted in the channel:\n' +
 						'imgur, youtube, twitter, github, soundcloud');
+	} else if (args[0] === '!remind') {
+		if (!args[1] || !args[2]) {
+			bot.say(to, 'Missing TIME and TEXT. For example: !remind 14:30 Check pizza in oven');
+		} else {
+			var timeToRemind = args[1];
+			var currentdate = new Date();
+			var currentTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+			if (timeToRemind < currentTime) {
+				bot.say(to, 'Current time: ' + currentTime +
+						' is earlier then your set time, reminder is set for tomorrow.');
+			}
+			args.splice(0, 2);
+			ontime({
+				cycle: timeToRemind + ':00'
+			}, function (ot) {
+				bot.say(to, 'Hey ' + nick + ' , don\'t forget: ' + args.join(' '));
+				ot.done();
+				ot.cancel();
+				return;
+			})
+			bot.say(to, 'Reminder set for ' + nick + '. At ' + timeToRemind + ' with: ' + args.join(' '));
+		}
 	}
 
 });
