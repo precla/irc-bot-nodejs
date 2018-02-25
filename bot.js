@@ -513,7 +513,7 @@ bot.addListener('message', function(nick, to, text) {
 				ot.done();
 				ot.cancel();
 				return;
-			})
+			});
 			bot.say(to, 'Reminder set for ' + nick + '. At ' + timeToRemind + ' with: ' + args.join(' '));
 		}
 	}
