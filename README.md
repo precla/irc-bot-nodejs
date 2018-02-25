@@ -22,6 +22,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - `!isup` - checks if a specified site is up. Example: `!isup www.github.com`
 - `!csgo` - get player info for the game Counter-Strike: Global Offensive
 - `!g`, `!google` - search via google and show first result
+- `!remind` - set a reminder. Example: `!remind 16:30 Grab a beer`. Limitation: only time allowed, no date.
 
 ### To-do:
 - add more? ofc!
