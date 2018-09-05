@@ -37,7 +37,7 @@
     "countdown": "^2.6.0",
     "get-youtube-id": "^1.0.0",
     "google": "^2.1.0",
-    "irc": "0.5.2",
+    "irc-upd": "^0.10.0",
     "irc-colors": "^1.4.3",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
