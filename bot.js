@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
-* (C) 2017 precla
+* (C) 2018 precla
 *
 * This file is part of irc-bot-nodejs.
 *
@@ -500,7 +500,11 @@ bot.addListener('message', function(nick, to, text) {
 		} else {
 			var timeToRemind = args[1];
 			var currentdate = new Date();
-			var currentTime = currentdate.getHours() + ':' + currentdate.getMinutes();
+			var currMinutes = currentdate.getMinutes();
+			if (currMinutes < 10) {
+				currMinutes = '0' + currMinutes;
+			}
+			var currentTime = currentdate.getHours() + ':' + currMinutes;
 			if (timeToRemind < currentTime) {
 				bot.say(to, 'Current time: ' + currentTime +
 						' is earlier then your set time, reminder is set for tomorrow.');
