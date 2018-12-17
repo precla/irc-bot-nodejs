@@ -289,7 +289,7 @@ bot.addListener('message', function(nick, to, text) {
 			}
 			// before request, check if URL is OK, for example: www.example.123 would not allow request
 			if (urlToCheck.match(/(www\.)\w+(\.)[a-zA-Z]/g)) {
-				request('http://www.isup.me/' + urlToCheck, function (error, response, body) {
+				request('https://downforeveryoneorjustme.com/' + urlToCheck, function (error, response, body) {
 					if (!error && response.statusCode === 200) {
 						if (body.match(/It\'s just you/g)) {
 							bot.say(to, 'Site is up!');
