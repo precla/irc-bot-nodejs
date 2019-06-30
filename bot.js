@@ -199,8 +199,11 @@ bot.addListener('message', function(nick, to, text) {
 
 						var openweatherSummary = 'The current temperature in ' + openweatherJson.name +
 												', ' + openweatherJson.sys.country + ' is: ' + openweatherJson.main.temp.toFixed(1) +
-												' C, ' + openweatherJson.weather[0].description + '. Pressure: ' + openweatherJson.main.pressure +
-												' hpa. Wind speed: ' + openweatherJson.wind.speed + ' m/s (' + (openweatherJson.wind.speed * 3.6).toFixed(2) + ' km/h).';
+												' C, ' + openweatherJson.weather[0].description +
+												'. Pressure: ' + openweatherJson.main.pressure +
+												' hpa. Wind speed: ' + openweatherJson.wind.speed + ' m/s (' + (openweatherJson.wind.speed * 3.6).toFixed(2) +
+												' km/h). Humidity: ' + openweatherJson.main.humidity +
+												' %. Local Time: ' + moment.unix(parseInt(moment().format("X")) + parseInt(openweatherJson.timezone)).format("dddd, MMMM Do YYYY, HH:mm:ss") + '.';
 
 						bot.say(to, openweatherSummary);
 					} else {
