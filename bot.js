@@ -96,16 +96,16 @@ bot.addListener('message', function(nick, to, text) {
 		if (!args[1]) {
 			bot.say(to, 'Missing arguments. Usage example: !wp NodeJS');
 		} else {
-			args.shift();                                           // removes first arg and moves others by -1
-			args = args.join(' ');                                  // adds ' ' between every element of array and saves as string
-			var titleSecondTry = args;                              // save a copy for later use - if string has to be capitalized: martin scorsese -> Martin Scorsese
-			var title = querystring.stringify({ titles: args });    // add titles= before string
+			args.shift();
+			args = args.join(' ');
+			var titleSecondTry = args;	// save a copy for later use - if string has to be capitalized: martin scorsese -> Martin Scorsese
+			var title = querystring.stringify({ titles: args });
 			var wiki = 'https://en.wikipedia.org/w/api.php?continue=&action=query&' + title + '&indexpageids=&prop=extracts&exintro=&explaintext=&format=json';
 
 			request(wiki, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					var wikiSummary = JSON.parse(body);
-					var pageId = wikiSummary.query.pageids[0];      // get pageID
+					var pageId = wikiSummary.query.pageids[0];	// get pageID
 
 					// if pageId is -1 then the article does not exist
 					if (pageId === '-1') {
@@ -200,9 +200,9 @@ bot.addListener('message', function(nick, to, text) {
 												'. Pressure: ' + openweatherJson.main.pressure +
 												' hpa. Wind speed: ' + openweatherJson.wind.speed + ' m/s (' + (openweatherJson.wind.speed * 3.6).toFixed(2) +
 												' km/h). Humidity: ' + openweatherJson.main.humidity +
-												' %. Local Time: ' + moment.unix(parseInt(moment().format('X')) + parseInt(openweatherJson.timezone)).format('dddd, MMMM Do YYYY, HH:mm:ss') +
-												' h. Sunrise: ' + moment.unix(openweatherJson.sys.sunrise + parseInt(openweatherJson.timezone)).format('HH:mm:ss') +
-												' h, sunset: ' + moment.unix(openweatherJson.sys.sunset + parseInt(openweatherJson.timezone)).format('HH:mm:ss') + ' h.';
+												' %. Local Time: ' + moment.unix(parseInt(moment().format('X'), 10) + parseInt(openweatherJson.timezone, 10)).format('dddd, MMMM Do YYYY, HH:mm:ss') +
+												' h. Sunrise: ' + moment.unix(openweatherJson.sys.sunrise + parseInt(openweatherJson.timezone, 10)).format('HH:mm:ss') +
+												' h, sunset: ' + moment.unix(openweatherJson.sys.sunset + parseInt(openweatherJson.timezone, 10)).format('HH:mm:ss') + ' h.';
 
 						bot.say(to, openweatherSummary);
 					} else {
