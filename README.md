@@ -18,6 +18,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - `!wp <Article>` - get summary from Wikipedia for article. Example: `!wp Microsoft`.
 - `!weather [zip] <City>` - get weather info for city. The `zip` argument is not required.  
 	Example: `!weather Zagreb` or `!weather 10000,hr` will show the weather for Zagreb.
+	same for `!wf` (or `!weatherforecast`) - outputs weather forecast for the next 5 days
 - `!tv`, `!next`, `!last <showname>` - Example: `!next Suits` - gets info about the next *Suits* episode.
 - `!isup` - checks if a specified site is up. Example: `!isup www.github.com`
 - `!csgo` - get player info for the game Counter-Strike: Global Offensive
@@ -29,7 +30,7 @@ irc-bot-nodejs is a simple IRC bot with basic functionalities
 - reconnect after disconnecting from irc (until then, use: [foreverjs/forever](https://github.com/foreverjs/forever) ) 
 
 ### Done:
-- Weather command
+- Weather command - current weather or forecast
 - TVRage
 - Isup to check if site is up
 - NickServ identify
